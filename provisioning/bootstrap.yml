@@ -1,0 +1,6 @@
+---
+# file: bootstrap.yml
+
+- hosts: management-node
+  roles:
+    - { role: vagrant-setup }

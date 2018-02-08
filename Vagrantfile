@@ -136,19 +136,19 @@ Vagrant.configure(2) do |config|
     subconfig.vm.hostname = "master.example.org"
     subconfig.vm.network "private_network", ip: "192.168.56.250"
     subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
-#    subconfig.vm.provision "ansible_local" do |ansible|
-#      ansible.playbook = "provisioning/site.yml"
-#      # ansible.provisioning_path = "/vagrant"
-#      ansible.verbose = false
-#      ansible.vault_password_file = "provisioning/.ansible_vault"
-#      # ansible.ask_vault_pass = true
-#      ansible.limit = "all" # or only "nodes" group, etc.
-#      ansible.install = true
-#      ansible.inventory_path = "provisioning/inventory.ini"
-#      # pass environment variable to ansible, for example:
-#      # ANSIBLE_ARGS='--extra-vars "system_update=yes"' vagrant up
-#      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
-#    end
+    subconfig.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "provisioning/bootstrap.yml"
+      # ansible.provisioning_path = "/vagrant"
+      ansible.verbose = false
+      # ansible.vault_password_file = "provisioning/.ansible_vault"
+      # ansible.ask_vault_pass = true
+      ansible.limit = "all" # or only "nodes" group, etc.
+      ansible.install = true
+      ansible.inventory_path = "provisioning/inventory.ini"
+      # pass environment variable to ansible, for example:
+      # ANSIBLE_ARGS='--extra-vars "system_update=yes"' vagrant up
+      ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+    end
   end
 end
 
