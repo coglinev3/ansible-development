@@ -1,0 +1,10 @@
+.*~
+*~
+*.retry
+*.swp
+*.log
+.vagrant
+roles
+playbooks
+host_vars
+group_vars
