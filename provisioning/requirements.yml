@@ -1,0 +1,4 @@
+# Install needed roles from the Ansible Galaxy
+- src: coglinev3.vagrant-ansible-init
+  version: master
+  name: coglinev3.vagrant-ansible-init

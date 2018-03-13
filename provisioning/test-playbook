@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+options=
+playbook=$1
+shift
+
+while [[ $# -gt 0 ]]
+do
+    options="${options} $1"
+    shift
+done
+
+# Force Ansible to output jobs with color.
+export ANSIBLE_FORCE_COLOR=true
+
+# Set Path to Ansible vault file
+export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
+
+# go to the provisioning directory
+cd /vagrant/provisioning
+
+
+echo "Testing the role’s syntax."
+ansible-playbook ${playbook} -i inventory.ini --syntax-check
+if [[ $? -eq 0 ]]; then
+    echo "Syntax check passed."
+    echo
+else
+    echo "Syntax check failed!"
+    exit 1
+fi
+
+
+echo "Perform a dry run."
+ansible-playbook ${playbook} -i inventory.ini --check ${options} -f 7
+if [[ $? -eq 0 ]]; then
+    echo "Dry run passed."
+    echo
+else
+    echo "Dry run failed!"
+    exit 1
+fi
+
+
+echo "Run the playbook."
+ansible-playbook ${playbook} -i inventory.ini ${options} -f 7
+if [[ $? -eq 0 ]]; then
+    echo "Play book run passed."
+    echo
+else
+    echo "Play book run failed!"
+    exit 1
+fi
+
+
+echo "Run the role/playbook again, checking to make sure it's idempotent."
+ansible-playbook ${playbook} -i inventory.ini -f 7 \
+| grep -q 'changed=0.*failed=0' \
+&& (echo 'Idempotence test: passed' && exit 0) \
+|| (echo 'Idempotence test: failed' && exit 1)
+
