@@ -2,5 +2,19 @@
 # file: bootstrap.yml
 
 - hosts: management-node
+  become: true
   roles:
-    - { role: vagrant-setup }
+    - { role: coglinev3.vagrant-ansible-init }
+
+- hosts: ubuntu-nodes
+  gather_facts: False
+  become: true
+  # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
+  # apt updates)
+  # Thanks for discussion on https://gist.github.com/gwillem/4ba393dceb55e5ae276a87300f6b8e6f
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      register: output
+      changed_when: output.stdout != ""
+    - setup: # aka gather_facts

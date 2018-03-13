@@ -7,134 +7,118 @@ require 'getoptlong'
 opts = GetoptLong.new(
   [ '--el6-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--el7-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
-  [ '--ubuntu-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
-  [ '--debian-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-xenial-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-artful-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--debian-jessie-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--debian-stretch-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--provision', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '-f', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '-h', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--box-version', GetoptLong::OPTIONAL_ARGUMENT ],
 )
 
-# defaults
+# Set defaults
 el6_nodes = 1
 el7_nodes = 1
-xenial64_nodes = 1
-jessie64_nodes = 1
+ubuntu_xenial_nodes = 1
+ubuntu_artful_nodes = 1
+debian_jessie_nodes = 1
+debian_stretch_nodes = 1
 
+# Set options
 opts.each do |opt, arg|
   case opt
     when '--el6-nodes'
       el6_nodes = Integer(arg)
     when '--el7-nodes'
       el7_nodes = Integer(arg)
-    when '--ubuntu-nodes'
-      xenial64_nodes = Integer(arg)
-    when '--debian-nodes'
-      jessie64_nodes = Integer(arg)
+    when '--ubuntu-xenial-nodes'
+      ubuntu_xenial_nodes = Integer(arg)
+    when '--ubuntu-artful-nodes'
+      ubuntu_artful_nodes = Integer(arg)
+    when '--debian-jessie-nodes'
+      debian_jessie_nodes = Integer(arg)
+    when '--debian-stretch-nodes'
+      debian_stretch_nodes = Integer(arg)
   end
 end
 
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://atlas.hashicorp.com/search.
-EL6_IMAGE             = "centos/6"
-EL7_IMAGE             = "centos/7"
-UBUNTU_XENIAL64_IMAGE = "ubuntu/xenial64"
-DEBIAN_JESSIE64_IMAGE = "debian/jessie64"
-EL6_START             = true
-EL7_START             = true
-UBUNTU_XENIAL64_START = true
-DEBIAN_JESSIE64_START = true
-EL6_NODES             = el6_nodes
-EL7_NODES             = el7_nodes
-UBUNTU_XENIAL64_NODES = xenial64_nodes
-DEBIAN_JESSIE64_NODES = jessie64_nodes
 
+boxes = [
+  { # Enterprise Linux 6 (RHEL6/CentOS6)
+    :image => 'centos/6', :start => true, :nodes => el6_nodes, :ip_offset => 240,
+    :hostname => 'el6-node', :vbox_name => 'EL6 - Node'
+  },
+  { # Enterprise Linux 7 (RHEL7/CentOS7)
+    :image => 'centos/7', :start => true, :nodes => el7_nodes, :ip_offset => 230,
+    :hostname => 'el7-node', :vbox_name => 'EL7 - Node'
+  },
+  { # Official Ubuntu Server 16.04 LTS (Xenial Xerus)
+    :image => 'ubuntu/xenial64', :start => true, :nodes => ubuntu_xenial_nodes,
+    :ip_offset => 220, :hostname => 'ubuntu-xenial-node', :vbox_name => 'Ubuntu (Xenial) - Node'
+  },
+  { # Official Ubuntu 17.10 (Artful Aardvark)
+    :image => 'ubuntu/artful64', :start => true, :nodes => ubuntu_artful_nodes,
+    :ip_offset => 210, :hostname => 'ubuntu-artful-node', :vbox_name => 'Ubuntu (Artful) - Node'
+  },
+  { # Vanilla Debian 8 "Jessie"
+    :image => 'debian/jessie64', :start => true, :nodes => debian_jessie_nodes,
+    :ip_offset => 200, :hostname => 'debian-jessie-node', :vbox_name => 'Debian (Jessie) - Node'
+  },
+  { # Vanilla Debian 9 "Stretch"
+    :image => 'debian/stretch64', :start => true, :nodes => debian_stretch_nodes,
+    :ip_offset => 190, :hostname => 'debian-stretch-node', :vbox_name => 'Debian (Stretch) - Node'
+  },
+]
 
 Vagrant.configure(2) do |config|
 
-  # CentOS 7 Nodes
-  (1..EL7_NODES).each do |i|
-    config.vm.define "el7-node#{i}", autostart: EL7_START do |subconfig|
-      subconfig.vm.box = EL7_IMAGE
-      subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-      subconfig.vm.provider "virtualbox" do |vbox|
-        # vbox.memory = "2048"
-        # vbox.cpus = 2
-        vbox.gui = false
-        vbox.name = "Ansible EL7 - Node #{i}"
-        vbox.linked_clone = true
+  # Box Configuration (Ansible Clients)
+  boxes.each do |box|
+    (1..box[:nodes]).each do |i|
+      config.vm.define "#{box[:hostname]}#{i}", autostart: box[:start] do |subconfig|
+        subconfig.vm.box = box[:image]
+        subconfig.vm.synced_folder ".", "/vagrant", disabled: true
+        subconfig.vm.provider "virtualbox" do |vbox|
+          # vbox.memory = "2048"
+          # vbox.cpus = 2
+          vbox.gui = false
+          vbox.name = "#{box[:vbox_name]} #{i}"
+          vbox.linked_clone = true
+          vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+          # Disconnecting the serial port solves the slow boot problem of some
+          # distributions.
+          vbox.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+        end
+        subconfig.vm.hostname = "#{box[:hostname]}#{i}.example.org"
+        subconfig.vm.network "private_network", ip: "192.168.56.#{i+box[:ip_offset]}"
+        # The Vagrant timezone configuration doesn't work correctly.
+        # Thæt's why I use the solution from Frédéric Henri, see: https://stackoverflow.com/questions/33939834/how-to-correct-system-clock-in-vagrant-automatically
+        # You have to replace 'Europe/Berlin' with the timezone you want to set.
+        subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
       end
-      subconfig.vm.hostname = "el7-node#{i}.example.org"
-      subconfig.vm.network "private_network", ip: "192.168.56.#{i+240}"
-      subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
     end
   end
 
-  # CentOS 6 Nodes
-  (1..EL6_NODES).each do |i|
-    config.vm.define "el6-node#{i}", autostart: EL6_START do |subconfig|
-      subconfig.vm.box = EL6_IMAGE
-      subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-      subconfig.vm.provider "virtualbox" do |vbox|
-        # vbox.memory = "2048"
-        # vbox.cpus = 2
-        vbox.gui = false
-        vbox.name = "Ansible EL6 - Node #{i}"
-        vbox.linked_clone = true
-      end
-      subconfig.vm.hostname = "el6-node#{i}.example.org"
-      subconfig.vm.network "private_network", ip: "192.168.56.#{i+230}"
-      subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
-    end
-  end
-
-  # Ubuntu/xenial64 Nodes
-  (1..UBUNTU_XENIAL64_NODES).each do |i|
-    config.vm.define "ubuntu-node#{i}", autostart: UBUNTU_XENIAL64_START do |subconfig|
-      subconfig.vm.box = UBUNTU_XENIAL64_IMAGE
-      subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-      subconfig.vm.provider "virtualbox" do |vbox|
-        # vbox.memory = "2048"
-        # vbox.cpus = 2
-        vbox.gui = false
-        vbox.name = "Ansible Ubuntu (Xenial64) - Node #{i}"
-        vbox.linked_clone = true
-      end
-      subconfig.vm.hostname = "ubuntu-node#{i}.example.org"
-      subconfig.vm.network "private_network", ip: "192.168.56.#{i+220}"
-      #subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
-    end
-  end
-
-  # Debian/jessie64 Nodes
-  (1..DEBIAN_JESSIE64_NODES).each do |i|
-    config.vm.define "debian-node#{i}", autostart: DEBIAN_JESSIE64_START do |subconfig|
-      subconfig.vm.box = DEBIAN_JESSIE64_IMAGE
-      subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-      subconfig.vm.provider "virtualbox" do |vbox|
-        # vbox.memory = "2048"
-        # vbox.cpus = 2
-        vbox.gui = false
-        vbox.name = "Ansible Debian (Jessie64) - Node #{i}"
-        vbox.linked_clone = true
-      end
-      subconfig.vm.hostname = "debian-node#{i}.example.org"
-      subconfig.vm.network "private_network", ip: "192.168.56.#{i+210}"
-      #subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
-    end
-  end
-
-  # Ansible Management Node
+  # Ansible Management Node Configuration
   config.vm.define "master", primary: true do |subconfig|
-    subconfig.vm.box = EL7_IMAGE
-    subconfig.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    subconfig.vm.box = 'centos/7'
+    subconfig.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
     subconfig.vm.provider "virtualbox" do |vbox|
       # vbox.memory = "2048"
       # vbox.cpus = 2
       vbox.gui = false
-      vbox.name = "Ansible Master"
+      vbox.name = "Management Node"
       vbox.linked_clone = true
+      vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
     end
     subconfig.vm.hostname = "master.example.org"
     subconfig.vm.network "private_network", ip: "192.168.56.250"
+    # The Vagrant timezone configuration doesn't work correctly.
+    # Thæt's why I use the solution from Frédéric Henri, see: https://stackoverflow.com/questions/33939834/how-to-correct-system-clock-in-vagrant-automatically
+    # You have to replace 'Europe/Berlin' with the timezone you want to set.
     subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime", run: "always"
     subconfig.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "provisioning/bootstrap.yml"
@@ -150,6 +134,7 @@ Vagrant.configure(2) do |config|
       ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
     end
   end
+
 end
 
 # vim:set nu expandtab ts=2 sw=2 sts=2:
