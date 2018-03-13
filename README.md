@@ -6,7 +6,7 @@ This is a Vagrant/VirtualBox environment which should represent a real life Ansi
 * Ubuntu 16.04.3 LTS (Xenial Xerus),
 * Ubuntu 17.10 (Artful Aardvark),
 * Debian 8 (Jessie) and
-* Debian 9 "Stretch".
+* Debian 9 (Stretch).
 
 It is desigend for developing and testing Ansible roles on these operating systems. The configuration can be easily changed to support other distributions as well.
 
@@ -246,7 +246,7 @@ vagrant halt && vagrant destroy -f
 
 ## 5. Version
 
-Release: x.y
+Release: 1.0.0
 
 ## 6. License
 
