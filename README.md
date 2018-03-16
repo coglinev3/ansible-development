@@ -1,6 +1,6 @@
 # Vagrant: Ansible development environment
 
-This is a Vagrant/VirtualBox environment which should represent a real life Ansible scenario with one Ansible management node named *master* and different Linux OS nodes (Ansible clients):
+This is a multi node Vagrant/VirtualBox environment which should represent a real life Ansible scenario with one Ansible management node named *master* and different Linux OS nodes (Ansible clients):
 * CentOS 6, 
 * CentOS 7, 
 * Ubuntu 16.04.3 LTS (Xenial Xerus),
