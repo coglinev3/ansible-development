@@ -7,8 +7,9 @@ require 'getoptlong'
 opts = GetoptLong.new(
   [ '--el6-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--el7-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
-  [ '--ubuntu-xenial-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--ubuntu-artful-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-trusty-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-xenial-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--debian-jessie-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--debian-stretch-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--provision', GetoptLong::OPTIONAL_ARGUMENT ],
@@ -20,8 +21,9 @@ opts = GetoptLong.new(
 # Set defaults
 el6_nodes = 1
 el7_nodes = 1
-ubuntu_xenial_nodes = 1
 ubuntu_artful_nodes = 1
+ubuntu_trusty_nodes = 1
+ubuntu_xenial_nodes = 1
 debian_jessie_nodes = 1
 debian_stretch_nodes = 1
 
@@ -32,6 +34,8 @@ opts.each do |opt, arg|
       el6_nodes = Integer(arg)
     when '--el7-nodes'
       el7_nodes = Integer(arg)
+    when '--ubuntu-trusty-nodes'
+      ubuntu_trusty_nodes = Integer(arg)
     when '--ubuntu-xenial-nodes'
       ubuntu_xenial_nodes = Integer(arg)
     when '--ubuntu-artful-nodes'
@@ -70,6 +74,10 @@ boxes = [
   { # Vanilla Debian 9 "Stretch"
     :image => 'debian/stretch64', :start => true, :nodes => debian_stretch_nodes,
     :ip_offset => 190, :hostname => 'debian-stretch-node', :vbox_name => 'Debian (Stretch) - Node'
+  },
+  { # Official Ubuntu Server 14.04 LTS (Trusty Tahr)
+    :image => 'ubuntu/trusty64', :start => true, :nodes => ubuntu_trusty_nodes,
+    :ip_offset => 180, :hostname => 'ubuntu-trusty-node', :vbox_name => 'Ubuntu (Trusty) - Node'
   },
 ]
 
