@@ -115,7 +115,7 @@ Vagrant.configure(2) do |config|
     subconfig.vm.box = 'centos/7'
     subconfig.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
     subconfig.vm.provider "virtualbox" do |vbox|
-      # vbox.memory = "2048"
+      vbox.memory = "4096"
       # vbox.cpus = 2
       vbox.gui = false
       vbox.name = "Management Node"
