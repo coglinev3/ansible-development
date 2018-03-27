@@ -1,5 +1,6 @@
 # Vagrant: Ansible development environment
 
+**Description**
 This is a multi node Vagrant/VirtualBox environment which should represent a real life Ansible scenario with one Ansible management node named *master* and different Linux OS nodes (Ansible clients):
 * CentOS 6, 
 * CentOS 7, 
@@ -11,19 +12,31 @@ This is a multi node Vagrant/VirtualBox environment which should represent a rea
 
 It is desigend for developing and testing Ansible roles for these operating systems. The configuration can be easily changed to support other Linux distributions as well.
 
+**Release**
+1.0.0
+
+**License**
+[GPLv3](https://gitlab.com/cogline_vagrant/ansible-development/blob/develop/LICENSE.md)
+
+**Author Information**
+
+This Vagrant environment was created in 2018 by Cogline.v3.
+
 
 ## 1. Requirements
 
 This setup was tested under Windows 10 with the following environment:
 * [VirtualBox = 5.2.8](https://www.virtualbox.org/)
-* [Vagrant = 2.0.2](https://www.vagrantup.com/)
+* [Vagrant >= 2.0.2](https://www.vagrantup.com/)
 * [Ansible = 2.4](http://docs.ansible.com/ansible/)
 * [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) information to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
+Of course, this Vagrant environment should also work on nativ Linux if *Vagrant*, *VirtualBox* and *Ansible* are installed.
 
-## 2. Setup Vagrant Box
 
-Under Windows open a cygwin bash for the next steps.
+## 2. Setup Vagrant Box Environment
+
+For the next steps open a bash (under Windows a cygwin bash) on the host system.
 
 
 ### 2.1 Get Vagrant box configuration from GitLAB
@@ -72,9 +85,60 @@ vagrant plugin install vagrant-vbguest
 ```
 
 
-### 2.3 Edit the Vagrantfile to fit your needs
+### 2.3 Provisioning
 
-#### 2.3.1 Configure Linux operation systems
+The machines are provisioned with Ansible via the playbook `bootstrap.yml` on the Ansible management node called *master*. The playbook contains three roles from Ansible Galaxy:
+* [coglinev3.vagrant-ansible-init](https://galaxy.ansible.com/coglinev3/vagrant-ansible-init/), this role performs the initial configuration for this multi node Vagrant environment (Configures `/etc/hosts`,  `/etc/ssh/ssh_knonw_hosts` and `/etc/ansible/ansible.cfg`on the management node) before we can really use Ansible 
+* [coglinev3.ansible-common](https://galaxy.ansible.com/coglinev3/ansible-common/), a role for setup defaults (Ansible module dependencies, software packages, etc.) for every supported Linux distribution
+* [sansible.users_and_groups](https://galaxy.ansible.com/sansible/users_and_groups/), a very good role for users and groups management if you want to create your own user(s) on theses systems
+
+#### 2.3.1 Initial Provisioning
+
+The next step will start all CentOS, Ubuntu and Debian nodes and the Ansible management (*master*) node. While starting the first time Vagrant will be run any configured provisioners against the running managed machines.
+
+```bash
+vagrant up
+```
+
+**Hint:**
+There is a know bug with Vagrant until version 2.0.2 and Ubuntu 17.10 (Artful Aardvark) on creating a private network, see [issue #9134](https://github.com/hashicorp/vagrant/issues/9134). Vagrant tries to use the `/sbin/ifup` and `/sbin/ifdown` commands from the *ifupdown* package, which isn't installed anymore, because Ubuntu 17.10+ uses *netplan* for network configuration instead of the legacy */etc/network/interfaces* method.
+
+**Solution:**
+* Until Vagrant 2.0.2 `vagrant up` will crash while starting a ubuntu/artful64 box the first time. If this happens, you must log in to the virtual machine as user *vagrant* with password *vagrant* using the VirtualBox GUI. Install the ifupdown package and switch off the maschine. Afterwards you can execute `vagrant up` again on the Cygwin console.
+```bash
+# solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
+sudo apt-get -y install ifupdown
+sudo poweroff
+```
+* Vagrant 2.0.3 solves this issue, that's why the recommended way ist to upgrade to version 2.0.3.
+
+
+#### 2.3.2 Provisioning with extra Ansible variables
+
+If you user your own roles want to perform provisioning with special Ansible variables via command line you can use:
+
+```bash
+ANSIBLE_ARGS='--extra-vars "variable=value"' vagrant up --provision
+```
+
+
+#### 2.3.2 Repeat the provisioning
+
+Somethimes you want to repeat the provisioning. If all mashines are up and running you can do this with
+
+```bash
+vagrant provision
+```
+
+or if the mashines are down with:
+```bash
+vagrant up --provision
+```
+
+
+### 2.4 Edit the Vagrantfile to fit your needs
+
+#### 2.4.1 Configure Linux operation systems
 
 The `Vagrantfile` contains a variable named boxes, which defines all vargrant box/images that are needed.
 
@@ -113,9 +177,9 @@ Attribute description:
 - **vbox_name**: Then name prefix in Oracles Virtualbox GUI
 
 **Hint:**
-If you define new machines, you must also defiune them in the Ansible inventory file `/vagrant/provisioning/inventory.ini` in order to use the machine with Ansible.
+If you define new machines, you must also define them in the Ansible inventory file `/vagrant/provisioning/inventory.ini` in order to use the machine with Ansible.
 
-#### 2.3.2 Set correct timezone
+#### 2.4.2 Set correct timezone
 
 The Vagrant timezone configuration doesn't work correctly. That's why I use the solution from [Frédéric Henri](https://stackoverflow.com/users/4296747/fr%c3%a9d%c3%a9ric-henri), see discussion: [How to correct system clock in vagrant automatically](https://stackoverflow.com/questions/33939834/how-to-correct-system-clock-in-vagrant-automatically).
 
@@ -125,38 +189,6 @@ subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s 
 ```
 
 You have to replace 'Europe/Berlin' with the timezone you want to set.
-
-
-### 2.4 Provisioning
-
-#### 2.4.1 Initial Provisioning
-
-The next step will start all CentOS, Ubuntu and Debian nodes and the Ansible management (*master*) node. While starting the first time Vagrant will be run any configured provisioners against the running managed machines.
-
-```bash
-vagrant up
-```
-
-**Hint:**
-There is a know bug with Vagrant and Ubuntu 17.10 (Artful Aardvark) on creating a private network, see [issue #9134](https://github.com/hashicorp/vagrant/issues/9134). Vagrant tries to use the `/sbin/ifup` and `/sbin/ifdown` commands from the *ifupdown* package, which isn't installed anymore, because Ubuntu 17.10+ uses *netplan* for network configuration instead of the legacy */etc/network/interfaces* method.
-
-That's why `vagrant up` will crash while starting a ubuntu/artful64 box the first time.
-If this happens, you must log in to the virtual machine as user *vagrant* with password *vagrant* using the VirtualBox GUI. Install the ifupdown package and switch off the maschine.
-
-```bash
-sudo apt-get -y install ifupdown
-sudo poweroff
-```
-
-Afterwards you can execute `vagrant up` again.
-
-#### 2.4.2 Provisioning with extra Ansible variables
-
-If you want to perform provisioning with special Ansible variables you can use:
-
-```bash
-ANSIBLE_ARGS='--extra-vars "variable=value"' vagrant up --provision
-```
 
 
 ### 2.5 Save and restore current state
