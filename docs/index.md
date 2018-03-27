@@ -13,7 +13,7 @@ This is a multi node Vagrant/VirtualBox environment which should represent a rea
 It is desigend for developing and testing Ansible roles for these operating systems. The configuration can be easily changed to support other Linux distributions as well.
 
 **Release**
-1.0.0
+1.0.2
 
 **License**
 [GPLv3](https://gitlab.com/cogline_vagrant/ansible-development/blob/develop/LICENSE.md)
@@ -301,14 +301,10 @@ If you have done your work then the next command stops the running machines whic
 vagrant halt && vagrant destroy -f
 ```
 
-## 5. Version
-
-Release: 1.0.1
-
-## 6. License
+## 5. License
 
 GPLv3
 
-## 7. Author Information
+## 6. Author Information
 
 This Vagrant environment was created in 2018 by Cogline.v3.
