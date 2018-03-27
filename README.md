@@ -303,7 +303,7 @@ vagrant halt && vagrant destroy -f
 
 ## 5. Version
 
-Release: 1.0.0
+Release: 1.0.1
 
 ## 6. License
 
