@@ -13,8 +13,8 @@ done
 # Force Ansible to output jobs with color.
 export ANSIBLE_FORCE_COLOR=true
 
-# Set Path to Ansible vault file
-export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
+# Set Path to Ansible vault file if needed
+# export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
 
 # go to the provisioning directory
 cd /vagrant/provisioning

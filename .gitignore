@@ -8,3 +8,4 @@ roles
 playbooks
 host_vars
 group_vars
+files
