@@ -65,6 +65,10 @@ The next step will start all CentOS, Ubuntu and Debian nodes and the Ansible man
 vagrant up
 ```
 
+## Version
+
+Release: 1.1.0
+
 ## License
 
 GPLv3
