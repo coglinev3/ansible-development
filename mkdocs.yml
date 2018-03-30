@@ -1,0 +1,26 @@
+---
+site_name: Ansible Development Environment
+site_author: Cogline.v3
+
+pages:
+- Home: index.md
+- Motivation: motivation.md
+- Getting Started: getting_started.md
+- Test Ansible Roles: test_ansible_roles.md
+- Download Vagrant Boxes: download_images.md
+- Save, Restore and Delete: save_restore_delete.md
+- License: LICENSE.md
+
+theme:
+  name: readthedocs
+
+extra_css:
+  - css/extra.css
+
+markdown_extensions:
+  - toc:
+      permalink: 
+  - admonition
+  - def_list
+
+copyright: Copyright &copy; 2018 Cogline.v3. Release 1.1.0.
