@@ -14,8 +14,8 @@ pages:
 theme:
   name: readthedocs
 
-extra_css:
-  - css/extra.css
+#extra_css:
+#  - css/extra.css
 
 markdown_extensions:
   - toc:
