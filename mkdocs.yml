@@ -1,21 +1,24 @@
 ---
 site_name: Ansible Development Environment
+site_description: A development environmwnt for Ansible.
 site_author: Cogline.v3
 
+repo_url: https://gitlab.com/cogline_vagrant/ansible-development
+
 pages:
-- Home: index.md
-- Motivation: motivation.md
-- Getting Started: getting_started.md
-- Test Ansible Roles: test_ansible_roles.md
-- Download Vagrant Boxes: download_images.md
-- Save, Restore and Delete: save_restore_delete.md
-- License: LICENSE.md
+  - Home: index.md
+  - Motivation: motivation.md
+  - Getting Started: getting_started.md
+  - Test Ansible Roles: test_ansible_roles.md
+  - Download Vagrant Boxes: download_images.md
+  - Save, Restore and Delete: save_restore_delete.md
+  - License: LICENSE.md
 
 theme:
   name: readthedocs
 
-#extra_css:
-#  - css/extra.css
+extra_css:
+  - css/extra.css
 
 markdown_extensions:
   - toc:
