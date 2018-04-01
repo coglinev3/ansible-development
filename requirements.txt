@@ -1,4 +1,4 @@
- Copyright (c) 2016-2018 Martin Donath <martin.donath@squidfunk.com>
+# Copyright (c) 2016-2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -17,8 +17,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
-
-pip install --upgrade pip
 
 # Direct dependencies
 mkdocs>=0.17.1
