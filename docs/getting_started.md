@@ -69,7 +69,7 @@ Then the environment is ready for the development and testing of new Ansible
 playbooks and roles.
 
 
-!!! warning "Known Bug with Ubuntu 17.10:"
+??? warning "**Known Bug with Ubuntu 17.10:**"
     There is a know bug with Vagrant until version 2.0.2 and Ubuntu 17.10
     (Artful Aardvark) on creating a private network, see
     [issue #9134](https://github.com/hashicorp/vagrant/issues/9134). Vagrant
@@ -82,7 +82,7 @@ playbooks and roles.
 
     * Vagrant 2.0.3 solves this issue, that's why the recommended way ist to
       upgrade to version 2.0.3.
-    * If you can't upgrade to Vagrant `vagrant up` will crash while starting a
+    * If you can't upgrade to Vagrant 2.0.3 `vagrant up` will crash while starting a
       ubuntu/artful64 box the first time. If this happens, you must log in to
       the virtual machine as user *vagrant* with password *vagrant* using the
       VirtualBox GUI. Install the *ifupdown* package and switch off the machine
@@ -90,8 +90,10 @@ playbooks and roles.
       host console.
 
     Login as user *vagrant* via VirtualBox GUI :
-
-        # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
-        sudo apt-get -y install ifupdown
-        sudo poweroff
+    
+    ```bash
+    # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
+    sudo apt-get -y install ifupdown
+    sudo poweroff
+    ```
 

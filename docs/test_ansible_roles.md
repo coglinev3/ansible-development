@@ -33,8 +33,8 @@ inventory  = /vagrant/provisioning/inventory.ini
 roles_path = /vagrant/provisioning/roles:/etc/ansible/roles:/usr/share/ansible/roles
 ```
 
-If you want to use ŧhe [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
-feature with your roles you have to create an Ansible vault password file
+If you want to use the [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
+feature with your roles you have to create an Ansible Vault password file
 `/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
 `~/.bashrc` file: 
 
@@ -66,13 +66,13 @@ ansible all -m ping
 ```
  
 All clients that were up and running and specified in the inventory file
-`/vagrant/provisioning/inventory.ini` should respond to this command.
+`/vagrant/provisioning/inventory.ini` should positiv respond to this command.
 
 
 ## Create a new Ansible role
 
 If you want to create a new Ansible role put the new role in directory
-`/vagrant/provisioning/roles` on the Ansible management node. Remember thœ
+`/vagrant/provisioning/roles` on the Ansible management node. Remember the
 folder `/vagrant` is a shared folder between the virtual host and the
 virtual guest system.
 
@@ -103,7 +103,7 @@ Put the new role in the playbook.
 
 After that you can test the new role/playbook with:
 
-```bash
+```
 ./test-playbook playbook.yml
 ```
 
@@ -114,5 +114,6 @@ The shell script *test-playbook* will execute the following four steps:
 1. Run the role/playbook.
 1. Run the role/playbook again, checking to make sure it's idempotent.
 
-Thanks to [Jeff Geerling](https://www.jeffgeerling.com/) for his articles to Ansible test strategies. Hє is also the author of [Ansible for DevOps](https://www.jeffgeerling.com/project/ansible-devops), a great book about Ansible.
+Thanks to [Jeff Geerling](https://www.jeffgeerling.com/) for his articles to
+Ansible test strategies. He is also the author of [Ansible for DevOps](https://www.jeffgeerling.com/project/ansible-devops), a great book about Ansible.
 
