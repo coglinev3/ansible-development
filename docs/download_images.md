@@ -27,12 +27,13 @@ If your already have installed the Vagrant boxes you can upgrade them with:
 vagrant box update
 ```
 
-On some Vagrant boxes the VirtualBox Guest Additions are not preinstalled.
-Therefore, you must first install the
-[vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
-plugin before you can use them.
+!!! attention "Ensure vbguest plugin is installed"
+    On some Vagrant boxes the VirtualBox Guest Additions are not preinstalled.
+    Therefore, you must first install the
+    [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+    plugin before you can use them.
 
-```bash
-vagrant plugin install vagrant-vbguest
-```
+    ```bash
+    vagrant plugin install vagrant-vbguest
+    ```
 
