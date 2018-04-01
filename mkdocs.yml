@@ -4,6 +4,7 @@ site_description: A development environmwnt for Ansible.
 site_author: Cogline.v3
 
 repo_url: https://gitlab.com/cogline_vagrant/ansible-development
+edit_uri: https://gitlab.com/cogline_vagrant/ansible-development/tree/master/docs
 
 pages:
   - Home: index.md
@@ -32,5 +33,6 @@ extra:
       link: 'https://gitlab.com/cogline_vagrant/ansible-development.git'
     - type: 'github'
       link: 'https://github.com/coglinev3/vagrant-ansible-init'
+  version: 1.1.0
 
 copyright: Copyright &copy; 2018 Cogline.v3. Release 1.1.0.
