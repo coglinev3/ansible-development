@@ -25,7 +25,12 @@ markdown_extensions:
       permalink: True
   - admonition
   - def_list
-  - pymdownx.details
-  - pymdownx.superfences
+
+extra:
+  social:
+    - type: 'gitlab'
+      link: 'https://gitlab.com/cogline_vagrant/ansible-development.git'
+    - type: 'github'
+      link: 'https://github.com/coglinev3/vagrant-ansible-init'
 
 copyright: Copyright &copy; 2018 Cogline.v3. Release 1.1.0.
