@@ -22,8 +22,10 @@ extra_css:
 
 markdown_extensions:
   - toc:
-      permalink: 
+      permalink: True
   - admonition
   - def_list
+  - pymdownx.details
+  - pymdownx.superfences
 
 copyright: Copyright &copy; 2018 Cogline.v3. Release 1.1.0.
