@@ -91,7 +91,9 @@ playbooks and roles.
 
     Login as user *vagrant* via VirtualBox GUI :
     
-        # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
-        sudo apt-get -y install ifupdown
-        sudo poweroff
+    ```bash
+    # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
+    sudo apt-get -y install ifupdown
+    sudo poweroff
+    ```
 
