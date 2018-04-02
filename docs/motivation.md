@@ -5,7 +5,7 @@ and roles can be tested using Vagrant and VirtualBox or any other virtualization
 system. In most cases, the respective operating system is started and
 the playbook is executed with Vagrant's local Ansible provisioner. For example:
 
-```
+```ruby hl_lines="2 6"
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/trusty64"
   ...
@@ -18,7 +18,7 @@ end
 
 The simple Ansible inventory file for the test then looks mostly like this:
 
-```yml
+```ini
 [local]
 localhost ansible_connection=local
 ```
@@ -38,7 +38,9 @@ this way.
 in this test scenario very well but fail in a real production environment. Look
 at the following simple example:
 
-```yml
+
+```yaml
+---
 - name: Download WAR file to the Tomcat webapps directory
   maven_artifact:
     group_id: com.company
@@ -61,7 +63,8 @@ In such a case you have to download the WAR file to the Ansible
 management node first and copy them from there to the target system via the ssh
 connection like in this example:
 
-```yml
+
+```yaml
 - name: Download WAR file to the Ansible Management node
   localaction:
     module: maven_artifact:

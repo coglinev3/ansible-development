@@ -21,8 +21,13 @@ vagrant box add debian/jessie64
 vagrant box add debian/stretch64
 ```
 
-If your already have installed the Vagrant boxes you can upgrade them with:
+If you already have installed the Vagrant boxes you can upgrade them with:
 
+```bash
+vagrant box update <boxname>
+```
+
+Inside the project directory you can easily update all Vagrant boxes with:
 ```bash
 vagrant box update
 ```

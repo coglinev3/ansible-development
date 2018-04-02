@@ -28,7 +28,7 @@ vagrant up && vagrant ssh
 On the management node open the file `/etc/ansible/ansible.cfg` and check the
 variables *inventory* and *roles_path*:
 
-```bash
+```ini
 inventory  = /vagrant/provisioning/inventory.ini
 roles_path = /vagrant/provisioning/roles:/etc/ansible/roles:/usr/share/ansible/roles
 ```
