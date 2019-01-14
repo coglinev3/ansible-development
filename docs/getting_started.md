@@ -2,7 +2,7 @@
 
 This document will show you how to get up and running with this multi node
 [Vagrant](https://www.vagrantup.com/ "Vagrant") environment. If you are not
-familiar with Vagrant and  VirtualBox, then you should read thєse documents:
+familiar with Vagrant and  VirtualBox, then you should read these documents:
 
 * [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation")
 * [VirtualBox User Manual](https://www.virtualbox.org/manual/ "VirtualBox User Manual")
@@ -17,8 +17,13 @@ This setup was tested under Windows 10 with the following components installed:
 * [Ansible = 2.4](http://docs.ansible.com/ansible/)
 * [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
-Of course, this Vagrant environment should also work on nativ Linux if
-*Vagrant*, *VirtualBox* and *Ansible* are installed on the virtual host system.
+and under Ubuntu 16.04 LTS (Xenial Xerus) with
+
+* [VirtualBox = 6.0.0](https://www.virtualbox.org/)
+* [Vagrant = 2.2.3](https://www.vagrantup.com/)
+* [Ansible = 2.7.5](http://docs.ansible.com/ansible/)
+
+installed.
 
 
 ## Get the Vagrant Environment
@@ -81,7 +86,7 @@ playbooks and roles.
     **Solution:**
 
     * Vagrant 2.0.3 solves this issue, that's why the recommended way ist to
-      upgrade to version 2.0.3.
+      upgrade to version 2.0.3 or higher.
     * If you can't upgrade to Vagrant 2.0.3 `vagrant up` will crash while starting a
       ubuntu/artful64 box the first time. If this happens, you must log in to
       the virtual machine as user *vagrant* with password *vagrant* using the

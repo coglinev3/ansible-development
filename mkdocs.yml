@@ -1,6 +1,6 @@
 ---
-site_name: Ansible Development Environment
-site_description: A development environmwnt for Ansible with Vagrant and VirtualBox.
+site_name: Ansible development with Vagrant and VirtualBox
+site_description: A development environment for Ansible with Vagrant and VirtualBox.
 site_author: Cogline.v3
 
 repo_url: https://gitlab.com/cogline_vagrant/ansible-development

@@ -23,7 +23,7 @@ cd <path>/ansible-development
 vagrant up && vagrant ssh
 ```
 
-## Environment preparation
+## Environment preparation on Ansible master node
 
 On the management node open the file `/etc/ansible/ansible.cfg` and check the
 variables *inventory* and *roles_path*:

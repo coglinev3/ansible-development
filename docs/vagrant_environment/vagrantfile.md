@@ -256,10 +256,10 @@ Restart CentOS 6 node 2 of 3:
 vagrant --el6-nodes=3 reload el6-node2
 ```
 
-Destroy CentOS 6 node 3 of 3:
+Destroy CentOS 6 node 2 of 3:
 
 ```bash
-vagrant --el6-nodes=3 destroy el6-node3 -f
+vagrant --el6-nodes=3 destroy el6-node2 -f
 ```
 
 !!! attention
