@@ -1,4 +1,4 @@
-# Development environment for Ansible
+# A Vagrant / VirtualBox development environment for Ansible
 
 This is a multi node [Vagrant](https://www.vagrantup.com/ "Vagrant")/[VirtualBox](https://www.virtualbox.org/ "VirtualBox")
 environment which represents a real life [Ansible](http://docs.ansible.com/ansible/ "Ansible")
