@@ -11,6 +11,8 @@ pages:
   - Motivation: motivation.md
   - Getting Started: getting_started.md
   - Test Ansible Roles: test_ansible_roles.md
+  - The Vagrant Environment:
+      - The Vagrantfile in Details: vagrant_environment/vagrantfile.md 
   - Download Vagrant Boxes: download_images.md
   - Save, Restore and Delete: save_restore_delete.md
   - License: LICENSE.md
