@@ -4,6 +4,8 @@ This is a multi node [Vagrant](https://www.vagrantup.com/ "Vagrant")/[VirtualBox
 environment which represents a real life [Ansible](http://docs.ansible.com/ansible/ "Ansible")
 scenario with one Ansible management node and different Linux OS nodes (Ansible
 clients):
+![Ansible figure](ansible_figure.svg)
+The supported clients are:
 
 * CentOS 6, 
 * CentOS 7, 
@@ -13,6 +15,7 @@ clients):
 * Ubuntu 18.10 (Cosmic Cuttlefish),
 * Debian 8 (Jessie) and
 * Debian 9 (Stretch).
+
 
 It is desigend for developing Ansible playbooks and roles and testing them on
 these operating systems. The configuration can be easily changed to support
