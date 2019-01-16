@@ -1,6 +1,6 @@
 # The whole Vagrantfile
 
-This document describes the basis of this development environment - the 
+This document describes the base of this development environment - the 
 `Vagrantfile`. Every section of this file and how you can use it will be explaind
 step by step.
 
