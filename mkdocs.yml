@@ -1,6 +1,6 @@
 ---
-site_name: Ansible Development Environment
-site_description: A development environmwnt for Ansible.
+site_name: Ansible development with Vagrant and VirtualBox
+site_description: A development environment for Ansible with Vagrant and VirtualBox.
 site_author: Cogline.v3
 
 repo_url: https://gitlab.com/cogline_vagrant/ansible-development
@@ -11,6 +11,7 @@ pages:
   - Motivation: motivation.md
   - Getting Started: getting_started.md
   - Test Ansible Roles: test_ansible_roles.md
+  - The Vagrantfile in Details: vagrant_environment/vagrantfile.md 
   - Download Vagrant Boxes: download_images.md
   - Save, Restore and Delete: save_restore_delete.md
   - License: LICENSE.md
@@ -35,6 +36,6 @@ extra:
       link: 'https://gitlab.com/cogline_vagrant/ansible-development.git'
     - type: 'github'
       link: 'https://github.com/coglinev3/vagrant-ansible-init'
-  version: 1.1.1
+  version: 1.2.0
 
-copyright: Copyright &copy; 2018 Cogline.v3. Release 1.1.1.
+copyright: Copyright &copy; 2019 Cogline.v3. Release 1.2.0.

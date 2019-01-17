@@ -7,7 +7,8 @@ require 'getoptlong'
 opts = GetoptLong.new(
   [ '--el6-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--el7-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
-  [ '--ubuntu-artful-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-bionic-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--ubuntu-cosmic-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--ubuntu-trusty-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--ubuntu-xenial-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--debian-jessie-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
@@ -21,7 +22,8 @@ opts = GetoptLong.new(
 # Set defaults
 el6_nodes = 1
 el7_nodes = 1
-ubuntu_artful_nodes = 1
+ubuntu_bionic_nodes = 1
+ubuntu_cosmic_nodes = 1
 ubuntu_trusty_nodes = 1
 ubuntu_xenial_nodes = 1
 debian_jessie_nodes = 1
@@ -38,8 +40,10 @@ opts.each do |opt, arg|
       ubuntu_trusty_nodes = Integer(arg)
     when '--ubuntu-xenial-nodes'
       ubuntu_xenial_nodes = Integer(arg)
-    when '--ubuntu-artful-nodes'
-      ubuntu_artful_nodes = Integer(arg)
+    when '--ubuntu-bionic-nodes'
+      ubuntu_bionic_nodes = Integer(arg)
+    when '--ubuntu-cosmic-nodes'
+      ubuntu_cosmic_nodes = Integer(arg)
     when '--debian-jessie-nodes'
       debian_jessie_nodes = Integer(arg)
     when '--debian-stretch-nodes'
@@ -63,9 +67,13 @@ boxes = [
     :image => 'ubuntu/xenial64', :start => true, :nodes => ubuntu_xenial_nodes,
     :ip_offset => 220, :hostname => 'ubuntu-xenial-node', :vbox_name => 'Ubuntu (Xenial) - Node'
   },
-  { # Official Ubuntu 17.10 (Artful Aardvark)
-    :image => 'ubuntu/artful64', :start => true, :nodes => ubuntu_artful_nodes,
-    :ip_offset => 210, :hostname => 'ubuntu-artful-node', :vbox_name => 'Ubuntu (Artful) - Node'
+  { # Official Ubuntu 18.04 LTS (Bionic Beaver)
+    :image => 'ubuntu/bionic64', :start => true, :nodes => ubuntu_bionic_nodes,
+    :ip_offset => 210, :hostname => 'ubuntu-bionic-node', :vbox_name => 'Ubuntu (Bionic) - Node'
+  },
+  { # Official Ubuntu 18.10 (Cosmic Cuttlefish)
+    :image => 'ubuntu/cosmic64', :start => true, :nodes => ubuntu_cosmic_nodes,
+    :ip_offset => 170, :hostname => 'ubuntu-cosmic-node', :vbox_name => 'Ubuntu (Cosmic) - Node'
   },
   { # Vanilla Debian 8 "Jessie"
     :image => 'debian/jessie64', :start => true, :nodes => debian_jessie_nodes,
@@ -98,7 +106,7 @@ Vagrant.configure(2) do |config|
           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
           # Disconnecting the serial port solves the slow boot problem of some
           # distributions.
-          vbox.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+          ## vbox.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
         end
         subconfig.vm.hostname = "#{box[:hostname]}#{i}.example.org"
         subconfig.vm.network "private_network", ip: "192.168.56.#{i+box[:ip_offset]}"
