@@ -11,7 +11,8 @@ clients):
 * CentOS 7, 
 * Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
-* Ubuntu 17.10 (Artful Aardvark),
+* Ubuntu 18.04 LTS (Bionic Beaver),
+* Ubuntu 18.10 (Cosmic Cuttlefish),
 * Debian 8 (Jessie) and
 * Debian 9 (Stretch).
 
@@ -20,17 +21,24 @@ these operating systems. The configuration can be easily changed to support
 other Linux distributions as well.
 
 For detailed documentation how to use this environment look at:
-[Ansible Development Environment](http://ansible-development.readthedocs.io/en/latest/ "Ansible Development Environment") 
+[Ansible development with Vagrant and VirtualBox](http://ansible-development.readthedocs.io/en/latest/ "Ansible Development Environment") 
 
 ## Requirements
 
-This setup was tested under Windows 10 with the following environment:
-* [VirtualBox = 5.2.8](https://www.virtualbox.org/)
-* [Vagrant >= 2.0.2](https://www.vagrantup.com/)
-* [Ansible = 2.4](http://docs.ansible.com/ansible/)
-* [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) information to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
+This setup was tested under Windows 10 with the following components installed:
 
-Of course, this Vagrant environment should also work on nativ Linux if *Vagrant*, *VirtualBox* and *Ansible* are installed.
+* [VirtualBox = 5.2.8](https://www.virtualbox.org/)
+* [Vagrant = 2.0.3](https://www.vagrantup.com/)
+* [Ansible = 2.4](http://docs.ansible.com/ansible/)
+* [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
+
+and under Ubuntu 16.04 LTS (Xenial Xerus) with
+
+* [VirtualBox = 6.0.2](https://www.virtualbox.org/)
+* [Vagrant = 2.2.3](https://www.vagrantup.com/)
+* [Ansible = 2.7.5](http://docs.ansible.com/ansible/)
+
+installed.
 
 
 ## Setup Vagrant Box Environment
@@ -75,4 +83,4 @@ GPLv3
 
 ## Author Information
 
-This Vagrant environment was created in 2018 by Cogline.v3.
+This Vagrant environment was created in 2019 by Cogline.v3.
