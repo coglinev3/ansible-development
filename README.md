@@ -75,7 +75,7 @@ vagrant up
 
 ## Version
 
-Release: 1.1.1
+Release: 1.2.0
 
 ## License
 
