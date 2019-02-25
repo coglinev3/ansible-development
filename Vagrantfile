@@ -14,6 +14,7 @@ opts = GetoptLong.new(
   [ '--debian-jessie-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--debian-stretch-nodes', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--provision', GetoptLong::OPTIONAL_ARGUMENT ],
+  [ '--no-provision', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '-f', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '-h', GetoptLong::OPTIONAL_ARGUMENT ],
   [ '--box-version', GetoptLong::OPTIONAL_ARGUMENT ],
