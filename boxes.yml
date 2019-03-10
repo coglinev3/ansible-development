@@ -1,0 +1,45 @@
+---
+
+# Every Vagrant development environment requires a box. You can search for
+# boxes at https://atlas.hashicorp.com/search.
+
+- image: centos/6
+  start: true
+  hostname: el6-node
+  vbox_name: 'EL6 - Node'
+  nodes: 1
+- image: centos/7
+  start: true
+  hostname: el7-node
+  vbox_name: 'EL7 - Node'
+  nodes: 1
+- image: ubuntu/trusty64
+  start: true
+  hostname: ubuntu-trusty-node
+  vbox_name: 'Ubuntu (Trusty) - Node'
+  nodes: 1
+- image: generic/ubuntu1604
+  start: true
+  hostname: ubuntu-xenial-node
+  vbox_name: 'Ubuntu (Xenial) - Node'
+  nodes: 1
+- image: generic/ubuntu1804
+  start: true
+  hostname: ubuntu-bionic-node
+  vbox_name: 'Ubuntu (Bionic) - Node'
+  nodes: 1
+- image: generic/ubuntu1810
+  start: true
+  hostname: ubuntu-cosmic-node
+  vbox_name: 'Ubuntu (Cosmic) - Node'
+  nodes: 1
+- image: debian/jessie64
+  start: true
+  hostname: debian-jessie-node
+  vbox_name: 'Debian (Jessie) - Node'
+  nodes: 1
+- image: debian/stretch64
+  start: true
+  hostname: debian-stretch-node
+  vbox_name: 'Debian (Stretch) - Node'
+  nodes: 1
