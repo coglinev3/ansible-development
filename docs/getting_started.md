@@ -2,28 +2,30 @@
 
 This document will show you how to get up and running with this multi node
 [Vagrant](https://www.vagrantup.com/ "Vagrant") environment. If you are not
-familiar with Vagrant and  VirtualBox, then you should read these documents:
-
-* [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation")
-* [VirtualBox User Manual](https://www.virtualbox.org/manual/ "VirtualBox User Manual")
+familiar with Vagrant, then you should read the [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation") too.
 
 
 ## Requirements
 
-This setup was tested under Windows 10 with the following components installed:
+This setup was tested under Windows 10 with the following components: 
 
 * [VirtualBox = 5.2.8](https://www.virtualbox.org/)
 * [Vagrant = 2.0.3](https://www.vagrantup.com/)
 * [Ansible = 2.4](http://docs.ansible.com/ansible/)
 * [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
-and under Ubuntu 16.04 LTS (Xenial Xerus) with
+and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with
 
 * [VirtualBox = 6.0.0](https://www.virtualbox.org/)
-* [Vagrant = 2.2.3](https://www.vagrantup.com/)
+* [libvirt = 4.0.0](https://libvirt.org/index.html)
+* [Vagrant = 2.2.4](https://www.vagrantup.com/)
 * [Ansible = 2.7.5](http://docs.ansible.com/ansible/)
 
-installed.
+preinstalled.
+
+
+!!!Note
+    This document does not explain how to install these components. You have to do it yourself by reading the installation guides of these components.
 
 
 ## Get the Vagrant Environment
@@ -45,15 +47,19 @@ Now install Ansible roles defined under `provisioning/requirements.yml`:
 ansible-galaxy install -r provisioning/requirements.yml -p provisioning/roles
 ```
 
-### Install vagrant-vbguest plugin
+### Install vagrant plugins
 
-On some Vagrant boxes the VirtualBox Guest Additions are not preinstalled.
-Therefore you have to install the
-[vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest "vagrant-vbguest")
-plugin first.
+Before using this Vagrant environment, you still need to install the following plugins.
 
 ```bash
 vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-hostmanager
+```
+
+If you use Vagrant with libvirt, you also need to install these plugins.
+```bash
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-mutate
 ```
 
 ## Initial Provisioning
@@ -64,6 +70,11 @@ configured provisioners against the running managed machines.
 
 ```bash
 vagrant up
+```
+
+If you want to use vagrant with libvirt instead of VirtualBox, use
+```bash
+VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
 ```
 
 The first time this step takes a while. All required Vagrant Boxes will be

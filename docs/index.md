@@ -1,6 +1,6 @@
-# A Vagrant / VirtualBox development environment for Ansible
+# A Multi-VM Vagrant environment for Developing and Testing Ansible Roles
 
-This is a multi node [Vagrant](https://www.vagrantup.com/ "Vagrant")/[VirtualBox](https://www.virtualbox.org/ "VirtualBox")
+This is a multi node [Vagrant](https://www.vagrantup.com/ "Vagrant")
 environment which represents a real life [Ansible](http://docs.ansible.com/ansible/ "Ansible")
 scenario with one Ansible management node and different Linux OS nodes (Ansible
 clients):
@@ -17,9 +17,10 @@ The supported clients are:
 * Debian 9 (Stretch).
 
 
-It is desigend for developing Ansible playbooks and roles and testing them on
+It is desigend for developing and testing Ansible playbooks and roles on
 these operating systems. The configuration can be easily changed to support
-other Linux distributions as well.
+other Linux distributions as well. As Vagrant provider (Hypervisors) [VirtualBox](provider/virtualbox.md "VirtualBox")
+or [libvirt](provider/libvirt.md) with KVM can be used, default ist VirtualBox.
 
 * [Motivation](/motivation/)
 * [Getting Started](/getting_started/)
