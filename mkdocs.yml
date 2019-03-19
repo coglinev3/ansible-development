@@ -35,7 +35,7 @@ markdown_extensions:
   - toc:
       permalink: True
   - admonition
-  #- def_list
+  - def_list
   - extra
   - pymdownx.details
   - pymdownx.superfences
