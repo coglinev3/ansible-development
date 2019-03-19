@@ -1,6 +1,5 @@
 # Install needed roles from the Ansible Galaxy
 
-# This role performs the initial Ansible configuration in a multi node Vagrant environment.
 - src: coglinev3.vagrant-ansible-init
   version: master
   name: coglinev3.vagrant-ansible-init
