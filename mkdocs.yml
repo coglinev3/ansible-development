@@ -13,11 +13,11 @@ nav:
   - Motivation: motivation.md
   - Getting Started: getting_started.md
   - Developing and Testing Ansible Roles: test_ansible_roles.md
+  - The Vagrant environment in detail: vagrantfile.md 
   - Vagrant provider specific tasks: 
       - 'VirtualBox': 'provider/virtualbox.md'
       - 'libvirt (KVM)': 'provider/libvirt.md'
-  - The Vagrantfile in Details: vagrantfile.md 
-  - Download Vagrant Boxes: download_images.md
+  - Install and upgrade Vagrant Boxes: download_images.md
   - About:
     - Release Notes: release_notes.md
     - License: LICENSE.md
@@ -35,7 +35,8 @@ markdown_extensions:
   - toc:
       permalink: True
   - admonition
-  - def_list
+  #- def_list
+  - extra
   - pymdownx.details
   - pymdownx.superfences
 

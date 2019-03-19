@@ -35,32 +35,6 @@ inventory  = /vagrant/provisioning/inventory.ini
 roles_path = /vagrant/provisioning/roles:/etc/ansible/roles:/usr/share/ansible/roles
 ```
 
-### Use roles with Ansible Vault feature
-
-If you want to use the [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
-feature with your roles you have to create an Ansible Vault password file
-`/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
-`~/.bashrc` file: 
-
-```bash
-export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
-```
-
-You can activate the new environment variable with:
-
-```bash
-. ~/.bashrc
-```
-
-!!! Note
-    If you want to use Ansible's Vault feature while provisioning the whole 
-    environment with `vagrant provision` or `vagrant up --provision` using
-    Vagrant's local Ansible provsionier, then you should also uncomment the
-    following line in the `Vagrantfile`:
-
-        # ansible.vault_password_file = "provisioning/.ansible_vault"
-
-
 ### Check if the environment is ready
 
 Control if the ansible environment is working with:
@@ -137,4 +111,30 @@ The shell script *test-playbook* will execute the following four steps:
 
 Thanks to [Jeff Geerling](https://www.jeffgeerling.com/) for his articles to
 Ansible test strategies. He is also the author of [Ansible for DevOps](https://www.jeffgeerling.com/project/ansible-devops), a great book about Ansible.
+
+## Use roles with Ansible Vault feature
+
+If you want to use the [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
+feature with your roles you have to create an Ansible Vault password file
+`/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
+`~/.bashrc` file: 
+
+```bash
+export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
+```
+
+You can activate the new environment variable with:
+
+```bash
+. ~/.bashrc
+```
+
+!!! Note
+    If you want to use Ansible's Vault feature while provisioning the whole 
+    environment with `vagrant provision` or `vagrant up --provision` using
+    Vagrant's local Ansible provsionier, then you should also uncomment the
+    following line in the `Vagrantfile`:
+
+        # ansible.vault_password_file = "provisioning/.ansible_vault"
+
 

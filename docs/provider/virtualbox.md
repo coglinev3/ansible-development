@@ -29,8 +29,8 @@ vagrant snapshot save initial-setup
 
 # Save a single machine
 
-If only one single machine is to be saved, for example el6-node1, the following
-commands can be executed:
+If only a single machine is to be saved, eg. el6-node1, the following commands
+can be executed:
 
 ```bash
 vagrant halt el6-node1

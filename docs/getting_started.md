@@ -14,7 +14,7 @@ This setup was tested under Windows 10 with the following components:
 * [Ansible = 2.4](http://docs.ansible.com/ansible/)
 * [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
-and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with
+and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
 
 * [VirtualBox = 6.0.0](https://www.virtualbox.org/)
 * [libvirt = 4.0.0](https://libvirt.org/index.html)
@@ -83,33 +83,4 @@ Depending on the speed of the internet connection, this will take a few minutes.
 Subsequently, the individual systems are started and provisioned in sequence.
 Then the environment is ready for the development and testing of new Ansible
 playbooks and roles.
-
-
-!!! warning "Known Bug with Ubuntu 17.10 and Vagrant until 2.0.2:"
-    There is a know bug with Vagrant until version 2.0.2 and Ubuntu 17.10
-    (Artful Aardvark) on creating a private network, see
-    [issue #9134](https://github.com/hashicorp/vagrant/issues/9134). Vagrant
-    tries to use the `/sbin/ifup` and `/sbin/ifdown` commands from the
-    *ifupdown* package, which isn't installed anymore, because Ubuntu 17.10+
-    uses *netplan* for network configuration instead of the legacy
-    `/etc/network/interfaces` method.
-
-    **Solution:**
-
-    * Vagrant 2.0.3 solves this issue, that's why the recommended way ist to
-      upgrade to version 2.0.3 or higher.
-    * If you can't upgrade to Vagrant 2.0.3 `vagrant up` will crash while starting a
-      ubuntu/artful64 box the first time. If this happens, you must log in to
-      the virtual machine as user *vagrant* with password *vagrant* using the
-      VirtualBox GUI. Install the *ifupdown* package and switch off the machine
-      (see below). Afterwards you can execute `vagrant up` again on the virtual
-      host console.
-
-    Login as user *vagrant* via VirtualBox GUI :
-    
-    ```bash
-    # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
-    sudo apt-get -y install ifupdown
-    sudo poweroff
-    ```
 
