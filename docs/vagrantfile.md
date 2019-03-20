@@ -21,7 +21,7 @@ Within the ansible management node, called master, the host directory `<your_pat
 - **boxes.yml**: Contains the Box definitions für this Multi-VM environment.
 - **Vagrantfile**: Every Vagrant environment needs a [Vagrantfile](https://www.vagrantup.com/docs/vagrantfile/ "Vagrantfile"). The primary function of the Vagrantfile is to describe the type of machine required for a project, and how to configure and provision these machines. 
 - **provisioning/requirements.yml**: Requirements for installing needed Ansible roles from [Ansible Galaxy](https://galaxy.ansible.com/ "Ansible Galaxy is Ansible’s official hub for sharing Ansible content.") (or your own git repository)
-- **provisioning/inventory.ini**: [Ansible inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html "Ansible inventory file") file
+- **provisioning/inventory.ini**: [Ansible Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html "Ansible Inventory file") file
 - **provisioning/bootstrap.yml**: [Ansible Playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html "Ansible PLaybook") for the initial deployment of all nodes, including the master node
 - **provisioning/roles**: Directory for the [Ansible Roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html "Ansible Roles")
 - **provisioning/test-playbook**: Shell script for testing new roles
