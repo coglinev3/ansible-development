@@ -10,7 +10,7 @@ All actions described in this documentation will be performed as user *vagrant*
 unless otherwise specified, which is the default user in a Vagrant environment.
 
 Before you start with your work, ensure you have saved the environment. Then
-you can go back if something goes wrong, see section [Vagrant provider specific tasks](provider/provider.md)
+you can go back if something goes wrong, see section *"Vagrant provider specific tasks"*
 for save and restore the state of a virtual machine.
 
 ## Environment preparation
@@ -114,7 +114,7 @@ Ansible test strategies. He is also the author of [Ansible for DevOps](https://w
 
 ## Use roles with Ansible Vault feature
 
-If you want to use the [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
+If you want to use the [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 feature with your roles you have to create an Ansible Vault password file
 `/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
 `~/.bashrc` file: 
