@@ -117,7 +117,7 @@ on the host). Its goal is to enable name resolution of multi-machine environment
 !!! Note "Vagrantfile: Configure hostmanager plugin"
     ```bash
       config.hostmanager.enabled = false
-      config.hostmanager.manage_host = true
+      config.hostmanager.manage_host = false
       config.hostmanager.manage_guest = true
       config.hostmanager.ignore_private_ip = false
       config.hostmanager.include_offline = true
@@ -143,6 +143,52 @@ Configuration options
     # ... possible provisioning config after hostmanager ...
     ```
 
+!!! attention "Update the hosts file on the hosts's machine."
+    If you want to manage the hosts file on the host's computer, ensure that you have write access to the hosts file, before you set
+    ```bash
+    config.hostmanager.manage_host = true
+    ```
+
+    **Linux:**
+
+    To avoid being asked for the password every time the hosts file is updated,
+    enable passwordless sudo for the specific command that hostmanager uses to
+    update the hosts file.
+
+    * Add the following snippet to the sudoers file (e.g. `/etc/sudoers.d/vagrant_hostmanager`):
+    ```bash
+    Cmnd_Alias VAGRANT_HOSTMANAGER_UPDATE = /bin/cp <home-directory>/.vagrant.d/tmp/hosts.local /etc/hosts
+    %<admin-group> ALL=(root) NOPASSWD: VAGRANT_HOSTMANAGER_UPDATE
+    ```
+    Replace <home-directory> with your actual home directory (e.g. /home/joe) and `<admin-group>`
+    with the group that is used by the system for sudo access (usually sudo on
+    Debian/Ubuntu systems and wheel on Fedora/Red Hat systems).
+    
+    * If necessary, add yourself to the `<admin-group>`:
+    ```bash
+    usermod -aG <admin-group> <user-name>
+    ```
+    Replace <admin-group> with the group that is used by the system for sudo
+    access (see above) and <user-name> with you user name.
+
+
+    **Windows:**
+
+    Hostmanager will detect Windows guests and hosts and use the appropriate
+    path for the hosts file: `%WINDIR%\System32\drivers\etc\hosts`
+
+    By default on a Windows host, the hosts file is not writable without
+    elevated privileges. If hostmanager detects that it cannot overwrite the file,
+    it will attempt to do so with elevated privileges, causing the
+    UAC prompt to appear.
+    To avoid the UAC prompt, open `%WINDIR%\System32\drivers\etc\` in
+    Explorer, right-click the `hosts` file, go to Properties > Security > Edit
+    and give your user Modify permission.
+
+    UAC limitations:
+
+    Due to limitations caused by UAC, cancelling out of the UAC prompt will not cause any
+    visible errors, however the hosts file will not be updated.
 
 # Start up Ansible clients
 
