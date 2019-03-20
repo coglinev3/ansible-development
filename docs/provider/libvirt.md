@@ -37,9 +37,11 @@ vagrant mutate ubuntu/trusty64 libvirt
 # Save all virtual machines
 
 Because the libvirt provider does not support snapshots like the VirtualBox
-provider, you must use the command-line tool `virsh` to create and restore snapshots,
-see [Virsh Command Reference](https://libvirt.org/sources/virshcmdref/html/ "Virsh Command Reference") for details.
+provider, you must use other tools for taking snapshots. In the following
+examples the command-line tool `virsh` from libvirt is used to create and
+restore snapshots, see [Virsh Command Reference](https://libvirt.org/sources/virshcmdref/html/ "Virsh Command Reference") for details.
 
+Take a snapshot from all virtual machines:
 ```bash
 for vm in $(virsh list --all --name)
 do
@@ -55,7 +57,7 @@ done
 
 # Save a single machine
 
-If only a single machine is to be saved, eg. el6-node1, the following commands can be executed:
+If only a single machine is to be saved, eg. el6-node1, the following command can be executed:
 
 ```bash
 virsh snapshot-create-as ansible-development_el6-node1 --name initial-setup
