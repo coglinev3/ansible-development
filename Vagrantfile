@@ -43,6 +43,7 @@ Vagrant.configure(2) do |config|
           vbox.name = "#{box['vbox_name']} #{i}"
           vbox.linked_clone = true
           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+          vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
           override.vm.network "private_network", type: "dhcp"
           # get DHCP-assigned private network ip-address
           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
@@ -84,6 +85,7 @@ Vagrant.configure(2) do |config|
       vbox.name = "Management Node"
       vbox.linked_clone = true
       vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+      vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       override.vm.network "private_network", type: "dhcp"
       override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
       override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
