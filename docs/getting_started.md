@@ -9,17 +9,16 @@ familiar with Vagrant, then you should read the [Vagrant Documentation](https://
 
 This setup was tested under Windows 10 with the following components: 
 
-* [VirtualBox = 5.2.8](https://www.virtualbox.org/)
-* [Vagrant = 2.0.3](https://www.vagrantup.com/)
-* [Ansible = 2.4](http://docs.ansible.com/ansible/)
-* [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
+* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [Vagrant = 2.2.4](https://www.vagrantup.com/)
+* [Ansible = 2.2.3](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
 and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
 
-* [VirtualBox = 6.0.0](https://www.virtualbox.org/)
+* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
 * [libvirt = 4.0.0](https://libvirt.org/index.html)
 * [Vagrant = 2.2.4](https://www.vagrantup.com/)
-* [Ansible = 2.7.5](http://docs.ansible.com/ansible/)
+* [Ansible = 2.7.9](http://docs.ansible.com/ansible/)
 
 preinstalled.
 
