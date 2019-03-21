@@ -105,7 +105,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 1.2.0
+Release: 2.0.0
 
 
 ## License
