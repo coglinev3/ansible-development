@@ -1,12 +1,12 @@
-# Development environment for Ansible
+# A Multi-VM Vagrant environment for Developing and Testing Ansible Roles
 
 [![Documentation Status](https://readthedocs.org/projects/ansible-development/badge/?version=latest)](http://ansible-development.readthedocs.io/en/latest/?badge=latest)
 
 This is a multi node [Vagrant](https://www.vagrantup.com/ "Vagrant")
 environment which represents a real life [Ansible](http://docs.ansible.com/ansible/ "Ansible")
 scenario with one Ansible management node and different Linux OS nodes (Ansible
-clients):
-![Ansible figure](ansible_figure.svg)
+clients).
+
 The supported clients are:
 
 * CentOS 6, 
@@ -21,8 +21,9 @@ The supported clients are:
 
 It is desigend for developing and testing Ansible playbooks and roles on
 these operating systems. The configuration can be easily changed to support
-other Linux distributions as well. As Vagrant provider (Hypervisors) [VirtualBox](provider/virtualbox.md "VirtualBox")
-or [libvirt](provider/libvirt.md) with KVM can be used, default ist VirtualBox.
+other Linux distributions as well. As Vagrant provider (Hypervisors)
+[VirtualBox](https://www.virtualbox.org/ "Oracle VirtualBox")
+or [libvirt](https://libvirt.org/index.html "libvirt Virtualization API") with KVM can be used, default ist VirtualBox.
 
 For detailed documentation how to use this environment look at:
 [Vagrant environment for testing Ansible Roles](http://ansible-development.readthedocs.io/en/latest/ "Ansible Development Environment") 
