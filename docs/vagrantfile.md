@@ -287,6 +287,7 @@ The Ansible Provisioner will then be explained in a separate section.
         # configuration for provider libvirt
         subconfig.vm.provider "libvirt" do |libvirt, override|
           libvirt.memory = "1024"
+          # synced folder via nfs requires the NFS Kernel Server on the host system
           override.vm.synced_folder ".", "/vagrant", type: "nfs"
           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
             if hostname = (vm.ssh_info && vm.ssh_info[:host])

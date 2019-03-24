@@ -55,10 +55,16 @@ vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-hostmanager
 ```
 
-If you use Vagrant with libvirt, you also need to install these plugins.
+If you use Vagrant with libvirt under Linux, you also need to install the
+following plugins
 ```bash
 vagrant plugin install vagrant-libvirt
 vagrant plugin install vagrant-mutate
+```
+and the NFS kernel server:
+```bash
+# on Debian/Ubuntu systems
+sudo apt install -y nfs-kernel-server
 ```
 
 ## Initial Provisioning
