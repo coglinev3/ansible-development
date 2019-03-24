@@ -89,3 +89,16 @@ Subsequently, the individual systems are started and provisioned in sequence.
 Then the environment is ready for the development and testing of new Ansible
 playbooks and roles.
 
+
+!!! attention "libvirt performs the installation in parallel"
+    The provider libvirt performs the installation of the virtual machines in
+    parallel. Sometimes it happens that Ansible Provisioner is running on the
+    master node before all Ansible clients are up and running. Thus, the
+    Ansible Provisioner sometimes can not reach all clients via SSH and 
+    Ansible will fail for the affected clients. In such a case, the Ansible
+    Provisioner on the master node must be rerun when all clients are up and
+    running.
+
+    ```bash
+    VAGRANT_DEFAULT_PROVIDER=libvirt vagrant provision master
+    ```
