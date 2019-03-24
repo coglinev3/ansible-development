@@ -1,3 +1,11 @@
+# Overview
+
+[Oracle VirtualBox](https://www.virtualbox.org/ "Oracle VirtualBox") is a powerful x86 and AMD64/Intel64 virtualization product for enterprise as well as home use. 
+In this article only the needed methods are described to use VirtualBox with Vagrant to save, restore and destroy virtual machines.
+Indeed it is not necessary to know much about VirtualBox. Vagrant will do all steps for you.
+If you still want to know more about VirtualBox, you should read the [VirtualBox User Manual](https://www.virtualbox.org/manual/ "VirtualBox User Manual").
+
+
 # Save all virtual machines
 
 Sometimes it makes sense to save the current state of all virtual machines
@@ -21,8 +29,8 @@ vagrant snapshot save initial-setup
 
 # Save a single machine
 
-If only one single machine is to be saved, for example el6-node1, the following
-commands can be executed:
+If only a single machine is to be saved, eg. el6-node1, the following commands
+can be executed:
 
 ```bash
 vagrant halt el6-node1

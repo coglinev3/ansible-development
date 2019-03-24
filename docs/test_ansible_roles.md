@@ -10,54 +10,32 @@ All actions described in this documentation will be performed as user *vagrant*
 unless otherwise specified, which is the default user in a Vagrant environment.
 
 Before you start with your work, ensure you have saved the environment. Then
-you can go back if something goes wrong, see section 
-"[Save all virtual machines](/save_restore_delete/ "Save, Restore and Delete")".
+you can go back if something goes wrong, see section *"Vagrant provider specific tasks"*
+for save and restore the state of a virtual machine.
 
-## Logon to the mangement node
+## Environment preparation
 
-Change to the project directory, start the environment if it is not already
-started, and log in to the ansible management node via ssh.
+### Logon to the mangement node
+
+Change to the project directory, start the virtual machines with vagrangt if they are not
+already started, and log in to the ansible management node via ssh.
 
 ```bash
 cd <path>/ansible-development
 vagrant up && vagrant ssh
 ```
 
-## Environment preparation on Ansible master node
+### Environment preparation on Ansible master node
 
 On the management node open the file `/etc/ansible/ansible.cfg` and check the
-variables *inventory* and *roles_path*:
+variables *inventory* and *roles_path*. They should have the following values:
 
 ```ini
 inventory  = /vagrant/provisioning/inventory.ini
 roles_path = /vagrant/provisioning/roles:/etc/ansible/roles:/usr/share/ansible/roles
 ```
 
-If you want to use the [Ansible Vault](http://docs.ansible.com/ansible/2.4/vault.html)
-feature with your roles you have to create an Ansible Vault password file
-`/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
-`~/.bashrc` file: 
-
-```bash
-export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
-```
-
-You can activate the new environment variable with:
-
-```bash
-. ~/.bashrc
-```
-
-!!! Note
-    If you want to use Ansible's Vault feature while provisioning the whole 
-    environment with `vagrant provision` or `vagrant up --provision` using
-    Vagrant's local Ansible privsionier, then you should also uncomment the
-    following line in `/vagrant/Vagrantfile`:
-
-        # ansible.vault_password_file = "provisioning/.ansible_vault"
-
-
-## Check if the environment is ready
+### Check if the environment is ready
 
 Control if the ansible environment is working with:
 
@@ -78,33 +56,50 @@ virtual guest system.
 
 ```bash
 cd /vagrant/provisioning/roles
-ansible-galaxy init new-role-name
+ansible-galaxy init example-role
 ```
 
-Then edit the new role. After finishing the new role create a *playbook.yml*
-file in directory `/vagrant/provisioning`
+Then edit the main task of the role **example-role**.
+```bash
+vi example-role/tasks/main.yml
+```
+
+Insert your tasks, for example:
+
+```yaml
+---
+# tasks file for example-role
+
+- name: Show all IPv4 addresses
+  debug:
+    var: ansible_all_ipv4_addresses
+```
+
+
+Now create a playbook for the new role:
 
 ```bash
 cd /vagrant/provisioning
-vi playbook.yml
+vi example-playbook.yml
 ```
 
 Put the new role in the playbook.
 
 ```yaml
 ---
-# file: playbook.yml
+# file: example-playbook.yml
 
 - hosts: all
-  become: yes
   roles:
-    - { role: new-role-name }
+    - { role: example-role }
 ```
+
+## Test the new Ansible role
 
 After that you can test the new role/playbook with:
 
 ```
-./test-playbook playbook.yml
+./test-playbook example-playbook.yml
 ```
 
 The shell script *test-playbook* will execute the following four steps:
@@ -116,4 +111,30 @@ The shell script *test-playbook* will execute the following four steps:
 
 Thanks to [Jeff Geerling](https://www.jeffgeerling.com/) for his articles to
 Ansible test strategies. He is also the author of [Ansible for DevOps](https://www.jeffgeerling.com/project/ansible-devops), a great book about Ansible.
+
+## Use roles with Ansible Vault feature
+
+If you want to use the [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
+feature with your roles you have to create an Ansible Vault password file
+`/vagrant/provisioning/.ansible_vault` and add the following line in *vagrant's*
+`~/.bashrc` file: 
+
+```bash
+export ANSIBLE_VAULT_PASSWORD_FILE=/vagrant/provisioning/.ansible_vault
+```
+
+You can activate the new environment variable with:
+
+```bash
+. ~/.bashrc
+```
+
+!!! Note
+    If you want to use Ansible's Vault feature while provisioning the whole 
+    environment with `vagrant provision` or `vagrant up --provision` using
+    Vagrant's local Ansible provsionier, then you should also uncomment the
+    following line in the `Vagrantfile`:
+
+        # ansible.vault_password_file = "provisioning/.ansible_vault"
+
 

@@ -2,28 +2,29 @@
 
 This document will show you how to get up and running with this multi node
 [Vagrant](https://www.vagrantup.com/ "Vagrant") environment. If you are not
-familiar with Vagrant and  VirtualBox, then you should read these documents:
-
-* [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation")
-* [VirtualBox User Manual](https://www.virtualbox.org/manual/ "VirtualBox User Manual")
+familiar with Vagrant, then you should read the [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation") too.
 
 
 ## Requirements
 
-This setup was tested under Windows 10 with the following components installed:
+This setup was tested under Windows 10 with the following components: 
 
-* [VirtualBox = 5.2.8](https://www.virtualbox.org/)
-* [Vagrant = 2.0.3](https://www.vagrantup.com/)
-* [Ansible = 2.4](http://docs.ansible.com/ansible/)
-* [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
+* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [Vagrant = 2.2.4](https://www.vagrantup.com/)
+* [Ansible = 2.2.3](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
-and under Ubuntu 16.04 LTS (Xenial Xerus) with
+and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
 
-* [VirtualBox = 6.0.0](https://www.virtualbox.org/)
-* [Vagrant = 2.2.3](https://www.vagrantup.com/)
-* [Ansible = 2.7.5](http://docs.ansible.com/ansible/)
+* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [libvirt = 4.0.0](https://libvirt.org/index.html)
+* [Vagrant = 2.2.4](https://www.vagrantup.com/)
+* [Ansible = 2.7.9](http://docs.ansible.com/ansible/)
 
-installed.
+preinstalled.
+
+
+!!!Note
+    This document does not explain how to install these components. You have to do it yourself by reading the installation guides of these components.
 
 
 ## Get the Vagrant Environment
@@ -45,15 +46,25 @@ Now install Ansible roles defined under `provisioning/requirements.yml`:
 ansible-galaxy install -r provisioning/requirements.yml -p provisioning/roles
 ```
 
-### Install vagrant-vbguest plugin
+### Install vagrant plugins
 
-On some Vagrant boxes the VirtualBox Guest Additions are not preinstalled.
-Therefore you have to install the
-[vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest "vagrant-vbguest")
-plugin first.
+Before using this Vagrant environment, you still need to install the following plugins.
 
 ```bash
 vagrant plugin install vagrant-vbguest
+vagrant plugin install vagrant-hostmanager
+```
+
+If you use Vagrant with libvirt under Linux, you also need to install the
+following plugins
+```bash
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-mutate
+```
+and the NFS kernel server:
+```bash
+# on Debian/Ubuntu systems
+sudo apt install -y nfs-kernel-server
 ```
 
 ## Initial Provisioning
@@ -66,6 +77,11 @@ configured provisioners against the running managed machines.
 vagrant up
 ```
 
+If you want to use vagrant with libvirt instead of VirtualBox, use
+```bash
+VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
+```
+
 The first time this step takes a while. All required Vagrant Boxes will be
 downloaded from the [Vagrant Cloud](https://app.vagrantup.com/boxes/search "Vagrant Cloud").
 Depending on the speed of the internet connection, this will take a few minutes.
@@ -74,31 +90,15 @@ Then the environment is ready for the development and testing of new Ansible
 playbooks and roles.
 
 
-!!! warning "Known Bug with Ubuntu 17.10 and Vagrant until 2.0.2:"
-    There is a know bug with Vagrant until version 2.0.2 and Ubuntu 17.10
-    (Artful Aardvark) on creating a private network, see
-    [issue #9134](https://github.com/hashicorp/vagrant/issues/9134). Vagrant
-    tries to use the `/sbin/ifup` and `/sbin/ifdown` commands from the
-    *ifupdown* package, which isn't installed anymore, because Ubuntu 17.10+
-    uses *netplan* for network configuration instead of the legacy
-    `/etc/network/interfaces` method.
+!!! attention "libvirt performs the installation in parallel"
+    The provider libvirt performs the installation of the virtual machines in
+    parallel. Sometimes it happens that Ansible Provisioner is running on the
+    master node before all Ansible clients are up and running. Thus, the
+    Ansible Provisioner sometimes can not reach all clients via SSH and 
+    Ansible will fail for the affected clients. In such a case, the Ansible
+    Provisioner on the master node must be rerun when all clients are up and
+    running.
 
-    **Solution:**
-
-    * Vagrant 2.0.3 solves this issue, that's why the recommended way ist to
-      upgrade to version 2.0.3 or higher.
-    * If you can't upgrade to Vagrant 2.0.3 `vagrant up` will crash while starting a
-      ubuntu/artful64 box the first time. If this happens, you must log in to
-      the virtual machine as user *vagrant* with password *vagrant* using the
-      VirtualBox GUI. Install the *ifupdown* package and switch off the machine
-      (see below). Afterwards you can execute `vagrant up` again on the virtual
-      host console.
-
-    Login as user *vagrant* via VirtualBox GUI :
-    
     ```bash
-    # solve issue #9134 on Ubuntu 17.10 (Artful Aardvark) system
-    sudo apt-get -y install ifupdown
-    sudo poweroff
+    VAGRANT_DEFAULT_PROVIDER=libvirt vagrant provision master
     ```
-
