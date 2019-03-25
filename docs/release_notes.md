@@ -1,3 +1,10 @@
+# Release Notes for Version 2.0.1
+
+* Add a hint to documentation how to switch off the parallel installation
+  the first time when using provider libvirt, to avoid provisioning on the
+  master node before all clients are up and running (see [initial provisioning](https://ansible-development.readthedocs.io/en/latest/getting_started/#initial-provisioning)).
+
+
 # Release Notes for Version 2.0.0
   * Individual options for the count of nodes have been completely removed.
   * The Vagrant boxes are now configured using the YAML file `boxes.yml`.
