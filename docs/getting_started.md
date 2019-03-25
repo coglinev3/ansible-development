@@ -23,7 +23,7 @@ and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) w
 preinstalled.
 
 
-!!!Note
+!!! Note
     This document does not explain how to install these components. You have to do it yourself by reading the installation guides of these components.
 
 
@@ -73,31 +73,36 @@ The next step will start all CentOS, Ubuntu and Debian nodes and the Ansible
 management node. While starting the first time Vagrant will be run any
 configured provisioners against the running managed machines.
 
+!!! Note "This will take a few minutes"
+    The first time this step takes a while. All required Vagrant Boxes will be
+    downloaded from the [Vagrant Cloud](https://app.vagrantup.com/boxes/search
+    "Vagrant Cloud"). Depending on the speed of your internet connection, this
+    will take a few minutes. Subsequently, the individual systems are started
+    and provisioned in sequence. Then the environment is ready for the
+    development and testing of new Ansible playbooks and roles.
+
+
 ```bash
 vagrant up
 ```
 
 If you want to use vagrant with libvirt instead of VirtualBox, use
 ```bash
-VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
+VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up --no-parallel
 ```
 
-The first time this step takes a while. All required Vagrant Boxes will be
-downloaded from the [Vagrant Cloud](https://app.vagrantup.com/boxes/search "Vagrant Cloud").
-Depending on the speed of the internet connection, this will take a few minutes.
-Subsequently, the individual systems are started and provisioned in sequence.
-Then the environment is ready for the development and testing of new Ansible
-playbooks and roles.
-
-
-!!! attention "libvirt performs the installation in parallel"
-    The provider libvirt performs the installation of the virtual machines in
-    parallel. Sometimes it happens that Ansible Provisioner is running on the
-    master node before all Ansible clients are up and running. Thus, the
-    Ansible Provisioner sometimes can not reach all clients via SSH and 
-    Ansible will fail for the affected clients. In such a case, the Ansible
-    Provisioner on the master node must be rerun when all clients are up and
-    running.
+!!! attention "libvirt: Switch off the parallel installation the first time"
+    The provider libvirt usually performs the installation of virtual machines
+    in parallel. It happens that Ansible Provisioner is running on the master
+    node before all Ansible clients are up and running. Therefore, the Ansible
+    Provisioner sometimes can not reach all clients through SSH from the master
+    node, and Ansible fails for the affected clients. Therefore, when starting
+    the environment for the first time, the parallel installation should be
+    suppressed using the vagrant option `--no-parallel`.
+    
+    If you have not turned off the parallel installation and the Ansible
+    provisioner fails, then the provisioning on the master node can be
+    re-executed with the following command after all clients are up and running.
 
     ```bash
     VAGRANT_DEFAULT_PROVIDER=libvirt vagrant provision master
