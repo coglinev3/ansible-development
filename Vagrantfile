@@ -33,6 +33,10 @@ Vagrant.configure(2) do |config|
           libvirt.memory = "512"
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
+          # there are no guest additions for Alpine Linux
+          if box["image"] == 'maier/alpine-3.8-x86_64'
+            override.vbguest.auto_update = false
+          end
           vbox.gui = false
           vbox.name = "#{box['vbox_name']} #{i}"
           vbox.linked_clone = true
