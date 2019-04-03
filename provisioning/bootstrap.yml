@@ -19,6 +19,17 @@
       changed_when: output.stdout != ""
     - setup: # aka gather_facts
 
+- hosts: alpine-nodes
+  gather_facts: False
+  become: true
+  # This will install python2 if missing on Alpine 
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python || (apk update && apk add python)
+      register: output
+      changed_when: output.stdout != ""
+    - setup: # aka gather_facts
+
 - hosts: all
   become: true
   roles:
