@@ -43,6 +43,11 @@
   hostname: debian-stretch-node
   vbox_name: 'Debian (Stretch) - Node'
   nodes: 1
+#- image: generic/alpine310
+#  start: true
+#  hostname: alpine-node
+#  vbox_name: 'Alpine Linux - Node'
+#  nodes: 1
 - image: maier/alpine-3.8-x86_64
   start: true
   hostname: alpine-node

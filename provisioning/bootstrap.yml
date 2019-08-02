@@ -1,12 +1,12 @@
 ---
 # file: bootstrap.yml
 
-- hosts: management-node
+- hosts: management
   become: true
   roles:
     - { role: coglinev3.vagrant-ansible-init }
 
-- hosts: ubuntu-nodes
+- hosts: ubuntu-trusty
   gather_facts: False
   become: true
   # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
@@ -19,15 +19,30 @@
       changed_when: output.stdout != ""
     - setup: # aka gather_facts
 
-- hosts: alpine-nodes
+- hosts: ubuntu:!ubuntu-trusty
+  gather_facts: False
+  become: true
+  pre_tasks:
+    - name: Install python3 for Ansible
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
+      register: output
+      changed_when: output.stdout != ""
+    - setup: # aka gather_facts
+
+- hosts: alpine
   gather_facts: False
   become: true
   # This will install python2 if missing on Alpine 
   pre_tasks:
+    - name: Install dhclinet
+      raw:  test -e /usr/sbin/dhclient || (apk update && apk add dhclient)
+      register: dhclient
+      changed_when: dhclient.stdout != ""
     - name: Install python for Ansible
-      raw: test -e /usr/bin/python || (apk update && apk add python)
-      register: output
-      changed_when: output.stdout != ""
+      #raw: test -e /usr/bin/python || (apk update && apk add python)
+      raw: test -e /usr/bin/python3 || (apk update && apk add python3)
+      register: python
+      changed_when: python.stdout != ""
     - setup: # aka gather_facts
 
 - hosts: all
