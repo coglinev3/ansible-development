@@ -33,6 +33,11 @@
   hostname: ubuntu-cosmic-node
   vbox_name: 'Ubuntu (Cosmic) - Node'
   nodes: 1
+- image: generic/ubuntu1904
+  start: true
+  hostname: ubuntu-disco-node
+  vbox_name: 'Ubuntu (Disco) - Node'
+  nodes: 1
 - image: debian/jessie64
   start: true
   hostname: debian-jessie-node
