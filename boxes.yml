@@ -43,3 +43,8 @@
   hostname: debian-stretch-node
   vbox_name: 'Debian (Stretch) - Node'
   nodes: 1
+- image: debian/buster64
+  start: true
+  hostname: debian-buster-node
+  vbox_name: 'Debian (Buster) - Node'
+  nodes: 1

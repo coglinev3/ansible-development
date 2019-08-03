@@ -11,12 +11,12 @@ The supported clients are:
 
 * CentOS 6, 
 * CentOS 7, 
-* Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
 * Ubuntu 18.10 (Cosmic Cuttlefish),
-* Debian 8 (Jessie) and
-* Debian 9 (Stretch).
+* Debian 8 (Jessie),
+* Debian 9 (Stretch) and
+* Debian 10 (Buster).
 
 
 It is desigend for developing and testing Ansible playbooks and roles on
