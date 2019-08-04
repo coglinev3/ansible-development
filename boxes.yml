@@ -28,11 +28,6 @@
   hostname: ubuntu-bionic-node
   vbox_name: 'Ubuntu (Bionic) - Node'
   nodes: 1
-- image: generic/ubuntu1810
-  start: true
-  hostname: ubuntu-cosmic-node
-  vbox_name: 'Ubuntu (Cosmic) - Node'
-  nodes: 1
 - image: generic/ubuntu1904
   start: true
   hostname: ubuntu-disco-node
