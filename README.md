@@ -11,9 +11,9 @@ The supported clients are:
 
 * CentOS 6, 
 * CentOS 7, 
+* Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
-* Ubuntu 18.10 (Cosmic Cuttlefish),
 * Ubuntu 19.04 (Disco Dingo),
 * Debian 8 (Jessie),
 * Debian 9 (Stretch) and
@@ -40,10 +40,10 @@ This setup was tested under Windows 10 with the following components:
 
 and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
 
-* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [VirtualBox = 6.0.10](https://www.virtualbox.org/)
 * [libvirt = 4.0.0](https://libvirt.org/index.html)
-* [Vagrant = 2.2.4](https://www.vagrantup.com/)
-* [Ansible = 2.7.9](http://docs.ansible.com/ansible/)
+* [Vagrant = 2.2.5](https://www.vagrantup.com/)
+* [Ansible = 2.8.2](http://docs.ansible.com/ansible/)
 
 preinstalled.
 
@@ -113,7 +113,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.0.1
+Release: 2.1.0
 
 
 ## License

@@ -11,7 +11,6 @@ The supported clients are:
 * CentOS 7, 
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
-* Ubuntu 18.10 (Cosmic Cuttlefish),
 * Ubuntu 19.04 (Disco Dingo),
 * Debian 8 (Jessie),
 * Debian 9 (Stretch) and

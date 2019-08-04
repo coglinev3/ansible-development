@@ -1,3 +1,9 @@
+# Release Notes for Version 2.1.0
+
+  * Added Ubuntu 19.04 (Disco Dingo)
+  * Added Debian 10 (Buster)
+  * Removed Ubuntu 18.10 (Cosmic Cuttlefish) - End of Life
+
 # Release Notes for Version 2.0.1
 
 * Add a hint to documentation how to switch off the parallel installation
