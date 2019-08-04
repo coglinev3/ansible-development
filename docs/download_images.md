@@ -7,7 +7,6 @@ Vagrant boxes can be downloaded separately from
 - [CentOS 7](https://app.vagrantup.com/centos/boxes/7 "CentOS 7")
 - [Ubuntu/Xenial64](https://app.vagrantup.com/generic/boxes/ubuntu1604 "Ubuntu 16.04 (Xenial Xerus)")
 - [Ubuntu/Bionic64](https://app.vagrantup.com/generic/boxes/ubuntu1804 "Ubuntu 18.04 (Bionic Beaver)")
-- [Ubuntu/Cosmic64](https://app.vagrantup.com/generic/boxes/ubuntu1810 "Ubuntu 18.10 (Cosmic Cuttlefish)")
 - [Ubuntu/Disco64](https://app.vagrantup.com/generic/boxes/ubuntu1904 "Ubuntu 19.04 (Disco Dingo)")
 - [Debian/Jessie64](https://app.vagrantup.com/debian/boxes/jessie64 "Debian 8 (Jessie)")
 - [Debian/Stretch64](https://app.vagrantup.com/debian/boxes/stretch64 "Debian 9 (Stretch)")
@@ -18,7 +17,6 @@ vagrant box add centos/6
 vagrant box add centos/7
 vagrant box add generic/ubuntu1604
 vagrant box add generic/ubuntu1804
-vagrant box add generic/ubuntu1810
 vagrant box add generic/ubuntu1904
 vagrant box add debian/jessie64
 vagrant box add debian/stretch64
