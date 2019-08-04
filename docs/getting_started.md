@@ -15,10 +15,10 @@ This setup was tested under Windows 10 with the following components:
 
 and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
 
-* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [VirtualBox = 6.0.10](https://www.virtualbox.org/)
 * [libvirt = 4.0.0](https://libvirt.org/index.html)
-* [Vagrant = 2.2.4](https://www.vagrantup.com/)
-* [Ansible = 2.7.9](http://docs.ansible.com/ansible/)
+* [Vagrant = 2.2.5](https://www.vagrantup.com/)
+* [Ansible = 2.8.2](http://docs.ansible.com/ansible/)
 
 preinstalled.
 

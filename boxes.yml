@@ -28,10 +28,10 @@
   hostname: ubuntu-bionic-node
   vbox_name: 'Ubuntu (Bionic) - Node'
   nodes: 1
-- image: generic/ubuntu1810
+- image: generic/ubuntu1904
   start: true
-  hostname: ubuntu-cosmic-node
-  vbox_name: 'Ubuntu (Cosmic) - Node'
+  hostname: ubuntu-disco-node
+  vbox_name: 'Ubuntu (Disco) - Node'
   nodes: 1
 - image: debian/jessie64
   start: true
@@ -42,4 +42,9 @@
   start: true
   hostname: debian-stretch-node
   vbox_name: 'Debian (Stretch) - Node'
+  nodes: 1
+- image: debian/buster64
+  start: true
+  hostname: debian-buster-node
+  vbox_name: 'Debian (Buster) - Node'
   nodes: 1

@@ -31,12 +31,6 @@ Vagrant.configure(2) do |config|
         subconfig.vm.hostname = "#{box['hostname']}#{i}"
         subconfig.vm.provider "libvirt" do |libvirt, override|
           libvirt.memory = "512"
-          # get DHCP-assigned private network ip-address
-          override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            if hostname = (vm.ssh_info && vm.ssh_info[:host])
-              `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[0]
-            end
-          end
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
           vbox.gui = false
@@ -48,7 +42,8 @@ Vagrant.configure(2) do |config|
           # get DHCP-assigned private network ip-address
           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
             if hostname = (vm.ssh_info && vm.ssh_info[:host])
-              `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[1]
+              # detect private network ip address on every Linux OS
+              `vagrant ssh "#{box['hostname']}#{i}" -c  "ip addr show eth1|grep -v ':'|egrep -o '([0-9]+\.){3}[0-9]+'"`.split(' ')[0]
             end
           end
         end
@@ -73,11 +68,6 @@ Vagrant.configure(2) do |config|
     subconfig.vm.provider "libvirt" do |libvirt, override|
       libvirt.memory = "1024"
       override.vm.synced_folder ".", "/vagrant", type: "nfs"
-      override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-        if hostname = (vm.ssh_info && vm.ssh_info[:host])
-          `vagrant ssh -c "hostname -I"`.split()[0]
-        end
-      end
     end
     subconfig.vm.provider "virtualbox" do |vbox, override|
       vbox.memory = "4096"
