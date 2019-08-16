@@ -1,12 +1,12 @@
 ---
 # file: bootstrap.yml
 
-- hosts: management-node
+- hosts: management_node
   become: true
   roles:
     - { role: coglinev3.vagrant-ansible-init }
 
-- hosts: ubuntu-nodes
+- hosts: ubuntu_nodes
   gather_facts: False
   become: true
   # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
