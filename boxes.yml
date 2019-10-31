@@ -48,3 +48,8 @@
   hostname: debian-buster-node
   vbox_name: 'Debian (Buster) - Node'
   nodes: 1
+- image: generic/alpine310
+  start: true
+  hostname: alpine310-node
+  vbox_name: 'Alpine 3.10 - Node'
+  nodes: 1

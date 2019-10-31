@@ -12,12 +12,12 @@ ENV["LANG"] = "C"
 Vagrant.configure(2) do |config|
 
   # define the order of providers 
-  config.vm.provider "virtualbox"
   config.vm.provider "libvirt"
+  config.vm.provider "virtualbox"
 
   # configure the hostmanager plugin
   config.hostmanager.enabled = false
-  config.hostmanager.manage_host = false
+  config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
@@ -31,8 +31,14 @@ Vagrant.configure(2) do |config|
         subconfig.vm.hostname = "#{box['hostname']}#{i}"
         subconfig.vm.provider "libvirt" do |libvirt, override|
           libvirt.memory = "512"
+          libvirt.nested = true
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
+          # Don't install VirtualBox guest additions with vagrant-vbguest
+          # plugin, because this doesn't work under Alpine Linux
+          if box["image"] =~ /alpine/
+            override.vbguest.auto_update = false
+          end
           vbox.gui = false
           vbox.name = "#{box['vbox_name']} #{i}"
           vbox.linked_clone = true
