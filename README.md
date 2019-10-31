@@ -9,6 +9,7 @@ clients).
 
 The supported clients are:
 
+* Alpine 3.10
 * CentOS 6, 
 * CentOS 7, 
 * Ubuntu 14.04 LTS (Trusty Tahr),
