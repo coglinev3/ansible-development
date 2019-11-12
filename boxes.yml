@@ -13,6 +13,11 @@
   hostname: el7-node
   vbox_name: 'EL7 - Node'
   nodes: 1
+- image: generic/centos8
+  start: true
+  hostname: el8-node
+  vbox_name: 'EL8 - Node'
+  nodes: 1
 - image: ubuntu/trusty64
   start: true
   hostname: ubuntu-trusty-node
