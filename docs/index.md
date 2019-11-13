@@ -7,8 +7,12 @@ clients):
 ![Ansible figure](ansible_figure.svg)
 The supported clients are:
 
+* Alpine 3.9
+* Alpine 3.10
 * CentOS 6, 
 * CentOS 7, 
+* CentOS 8, 
+* Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
 * Ubuntu 19.04 (Disco Dingo),
