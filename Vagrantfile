@@ -12,8 +12,8 @@ ENV["LANG"] = "C"
 Vagrant.configure(2) do |config|
 
   # define the order of providers 
-  config.vm.provider "libvirt"
   config.vm.provider "virtualbox"
+  config.vm.provider "libvirt"
 
   # configure the hostmanager plugin
   config.hostmanager.enabled = false
