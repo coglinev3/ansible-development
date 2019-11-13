@@ -3,6 +3,16 @@
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://atlas.hashicorp.com/search.
 
+- image: generic/alpine39
+  start: true
+  hostname: alpine39-node
+  vbox_name: 'Alpine 3.9 - Node'
+  nodes: 1
+- image: generic/alpine310
+  start: true
+  hostname: alpine310-node
+  vbox_name: 'Alpine 3.10 - Node'
+  nodes: 1
 - image: centos/6
   start: true
   hostname: el6-node
@@ -17,6 +27,21 @@
   start: true
   hostname: el8-node
   vbox_name: 'EL8 - Node'
+  nodes: 1
+- image: debian/jessie64
+  start: true
+  hostname: debian-jessie-node
+  vbox_name: 'Debian (Jessie) - Node'
+  nodes: 1
+- image: debian/stretch64
+  start: true
+  hostname: debian-stretch-node
+  vbox_name: 'Debian (Stretch) - Node'
+  nodes: 1
+- image: debian/buster64
+  start: true
+  hostname: debian-buster-node
+  vbox_name: 'Debian (Buster) - Node'
   nodes: 1
 - image: ubuntu/trusty64
   start: true
@@ -37,24 +62,4 @@
   start: true
   hostname: ubuntu-disco-node
   vbox_name: 'Ubuntu (Disco) - Node'
-  nodes: 1
-- image: debian/jessie64
-  start: true
-  hostname: debian-jessie-node
-  vbox_name: 'Debian (Jessie) - Node'
-  nodes: 1
-- image: debian/stretch64
-  start: true
-  hostname: debian-stretch-node
-  vbox_name: 'Debian (Stretch) - Node'
-  nodes: 1
-- image: debian/buster64
-  start: true
-  hostname: debian-buster-node
-  vbox_name: 'Debian (Buster) - Node'
-  nodes: 1
-- image: generic/alpine310
-  start: true
-  hostname: alpine310-node
-  vbox_name: 'Alpine 3.10 - Node'
   nodes: 1
