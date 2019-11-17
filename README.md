@@ -9,8 +9,6 @@ clients).
 
 The supported clients are:
 
-* Alpine 3.9
-* Alpine 3.10
 * CentOS 6, 
 * CentOS 7, 
 * CentOS 8, 
@@ -116,7 +114,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.1.0
+Release: 2.2.0
 
 
 ## License
