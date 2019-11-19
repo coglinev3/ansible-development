@@ -5,6 +5,8 @@ Vagrant boxes can be downloaded separately from
 
 - [CentOS 6](https://app.vagrantup.com/centos/boxes/6 "CentOS 6")
 - [CentOS 7](https://app.vagrantup.com/centos/boxes/7 "CentOS 7")
+- [CentOS 8](https://app.vagrantup.com/generic/boxes/centos8 "CentOS 8")
+- [Ubuntu/Trusty64](https://app.vagrantup.com/ubuntu/boxes/trusty64 "Ubuntu 14.04 LTS (Trusty Tahr)")
 - [Ubuntu/Xenial64](https://app.vagrantup.com/generic/boxes/ubuntu1604 "Ubuntu 16.04 (Xenial Xerus)")
 - [Ubuntu/Bionic64](https://app.vagrantup.com/generic/boxes/ubuntu1804 "Ubuntu 18.04 (Bionic Beaver)")
 - [Ubuntu/Disco64](https://app.vagrantup.com/generic/boxes/ubuntu1904 "Ubuntu 19.04 (Disco Dingo)")
@@ -15,6 +17,8 @@ Vagrant boxes can be downloaded separately from
 ```bash
 vagrant box add centos/6
 vagrant box add centos/7
+vagrant box add generic/centos8
+vagrant box add ubuntu/trusty64
 vagrant box add generic/ubuntu1604
 vagrant box add generic/ubuntu1804
 vagrant box add generic/ubuntu1904

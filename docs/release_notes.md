@@ -1,3 +1,7 @@
+# Release Notes for Version 2.2.0
+
+  * Added CentOS 8
+
 # Release Notes for Version 2.1.0
 
   * Added Ubuntu 19.04 (Disco Dingo)

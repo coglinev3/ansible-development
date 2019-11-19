@@ -381,6 +381,10 @@ As result here is the whole Vagrantfile.
     require 'yaml'
     boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
     
+    
+    # set defaul Language for each virtual machine to C
+    ENV["LANG"] = "C"
+    
     Vagrant.configure(2) do |config|
     
       # define the order of providers 
@@ -403,23 +407,25 @@ As result here is the whole Vagrantfile.
             subconfig.vm.hostname = "#{box['hostname']}#{i}"
             subconfig.vm.provider "libvirt" do |libvirt, override|
               libvirt.memory = "512"
-              # get DHCP-assigned private network ip-address
-              override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-                if hostname = (vm.ssh_info && vm.ssh_info[:host])
-                  `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[0]
-                end
-              end
+              libvirt.nested = true
             end
             subconfig.vm.provider "virtualbox" do |vbox, override|
+              # Don't install VirtualBox guest additions with vagrant-vbguest
+              # plugin, because this doesn't work under Alpine Linux
+              if box["image"] =~ /alpine/
+                override.vbguest.auto_update = false
+              end
               vbox.gui = false
               vbox.name = "#{box['vbox_name']} #{i}"
               vbox.linked_clone = true
               vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+              vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
               override.vm.network "private_network", type: "dhcp"
               # get DHCP-assigned private network ip-address
               override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
                 if hostname = (vm.ssh_info && vm.ssh_info[:host])
-                  `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[1]
+                  # detect private network ip address on every Linux OS
+                  `vagrant ssh "#{box['hostname']}#{i}" -c  "ip addr show eth1|grep -v ':'|egrep -o '([0-9]+\.){3}[0-9]+'"`.split(' ')[0]
                 end
               end
             end
@@ -444,11 +450,6 @@ As result here is the whole Vagrantfile.
         subconfig.vm.provider "libvirt" do |libvirt, override|
           libvirt.memory = "1024"
           override.vm.synced_folder ".", "/vagrant", type: "nfs"
-          override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            if hostname = (vm.ssh_info && vm.ssh_info[:host])
-              `vagrant ssh -c "hostname -I"`.split()[0]
-            end
-          end
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
           vbox.memory = "4096"
@@ -456,6 +457,7 @@ As result here is the whole Vagrantfile.
           vbox.name = "Management Node"
           vbox.linked_clone = true
           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+          vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
           override.vm.network "private_network", type: "dhcp"
           override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
@@ -482,5 +484,7 @@ As result here is the whole Vagrantfile.
       end
     
     end
+    
+    # vim:set nu expandtab ts=2 sw=2 sts=2:
     ```
 
