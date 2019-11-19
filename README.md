@@ -35,7 +35,7 @@ For detailed documentation how to use this environment look at:
 
 This setup was tested under Windows 10 with the following components: 
 
-* [VirtualBox = 6.0.4](https://www.virtualbox.org/)
+* [VirtualBox = 6.0.14](https://www.virtualbox.org/)
 * [Vagrant = 2.2.6](https://www.vagrantup.com/)
 * [Ansible = 2.2.3](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
