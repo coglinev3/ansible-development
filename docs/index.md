@@ -7,8 +7,6 @@ clients):
 ![Ansible figure](ansible_figure.svg)
 The supported clients are:
 
-* Alpine 3.9
-* Alpine 3.10
 * CentOS 6, 
 * CentOS 7, 
 * CentOS 8, 
