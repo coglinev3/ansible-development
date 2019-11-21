@@ -3,16 +3,16 @@
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://atlas.hashicorp.com/search.
 
-# - image: generic/alpine39
-#   start: true
-#   hostname: alpine39-node
-#   vbox_name: 'Alpine 3.9 - Node'
-#   nodes: 1
-# - image: generic/alpine310
-#   start: true
-#   hostname: alpine310-node
-#   vbox_name: 'Alpine 3.10 - Node'
-#   nodes: 1
+- image: generic/alpine39
+  start: true
+  hostname: alpine39-node
+  vbox_name: 'Alpine 3.9 - Node'
+  nodes: 1
+- image: generic/alpine310
+  start: true
+  hostname: alpine310-node
+  vbox_name: 'Alpine 3.10 - Node'
+  nodes: 1
 - image: centos/6
   start: true
   hostname: el6-node

@@ -6,7 +6,7 @@
   roles:
     - { role: coglinev3.vagrant-ansible-init }
 
-- hosts: ubuntu_nodes
+- hosts: ubuntu_trusty_nodes
   gather_facts: False
   become: true
   # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
@@ -19,7 +19,7 @@
       changed_when: output.stdout != ""
     - setup: # aka gather_facts
 
-- hosts: ubuntu_nodes:!ubuntu-trusty
+- hosts: ubuntu_nodes:!ubuntu_trusty_nodes
   gather_facts: False
   become: true
   pre_tasks:

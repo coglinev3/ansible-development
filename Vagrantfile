@@ -38,8 +38,12 @@ Vagrant.configure(2) do |config|
           # plugin, because this doesn't work under Alpine Linux
           if box["image"] =~ /alpine/
             override.vbguest.auto_update = false
+            override.vm.provision "shell",
+              inline: "test -e /usr/sbin/dhclient || (echo nameserver 10.0.2.3 > /etc/resolv.conf && apk add --update dhclient)"
           end
           vbox.gui = false
+          vbox.memory = 512
+          vbox.cpus = 1
           vbox.name = "#{box['vbox_name']} #{i}"
           vbox.linked_clone = true
           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
@@ -76,7 +80,7 @@ Vagrant.configure(2) do |config|
       override.vm.synced_folder ".", "/vagrant", type: "nfs"
     end
     subconfig.vm.provider "virtualbox" do |vbox, override|
-      vbox.memory = "4096"
+      vbox.memory = "1024"
       vbox.gui = false
       vbox.name = "Management Node"
       vbox.linked_clone = true
