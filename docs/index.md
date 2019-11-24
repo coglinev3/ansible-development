@@ -7,16 +7,19 @@ clients):
 ![Ansible figure](ansible_figure.svg)
 The supported clients are:
 
-* CentOS 6, 
-* CentOS 7, 
-* CentOS 8, 
+* Alpine 3.9,
+* Alpine 3.10,
+* CentOS 6,
+* CentOS 7,
+* CentOS 8,
+* Debian 8 (Jessie),
+* Debian 9 (Stretch),
+* Debian 10 (Buster),
 * Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
-* Ubuntu 19.04 (Disco Dingo),
-* Debian 8 (Jessie),
-* Debian 9 (Stretch) and
-* Debian 10 (Buster).
+* Ubuntu 19.04 (Disco Dingo) and
+* Ubuntu 19.10 (Eoan Ermine).
 
 
 It is desigend for developing and testing Ansible playbooks and roles on
