@@ -63,3 +63,8 @@
   hostname: ubuntu-disco-node
   vbox_name: 'Ubuntu (Disco) - Node'
   nodes: 1
+- image: generic/ubuntu1910
+  start: true
+  hostname: ubuntu-eoan-node
+  vbox_name: 'Ubuntu (Eoan) - Node'
+  nodes: 1
