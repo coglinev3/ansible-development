@@ -65,6 +65,8 @@ and the NFS kernel server:
 ```bash
 # on Debian/Ubuntu systems
 sudo apt install -y nfs-kernel-server
+# on Enterprise Linux (CentOS/RedHat)
+sudo yum -y install nfs-utils
 ```
 
 ## Initial Provisioning
