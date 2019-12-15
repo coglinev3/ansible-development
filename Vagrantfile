@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
 
   # configure the hostmanager plugin
   config.hostmanager.enabled = false
-  config.hostmanager.manage_host = true
+  config.hostmanager.manage_host = false
   config.hostmanager.manage_guest = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
@@ -30,8 +30,9 @@ Vagrant.configure(2) do |config|
         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
         subconfig.vm.hostname = "#{box['hostname']}#{i}"
         subconfig.vm.provider "libvirt" do |libvirt, override|
+          libvirt.cpus = 1
           libvirt.memory = "512"
-          libvirt.nested = true
+          libvirt.nested = false
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
           # Don't install VirtualBox guest additions with vagrant-vbguest
