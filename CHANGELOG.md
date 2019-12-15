@@ -1,3 +1,8 @@
+# Release 2.2.1
+
+  * Set hostmanager.manage_host back to false by default to avoid problems on
+  Windows systems (see https://ansible-development.readthedocs.io/en/master/vagrantfile/#configure-the-hostmanager-plugin).
+
 # Release 2.2.0
 
   * Added CentOS 8
