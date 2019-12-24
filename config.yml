@@ -1,0 +1,11 @@
+---
+vagrant_config:
+  env: 'staging'
+  staging:
+    hostmanager_manage_host: true
+    hostmanager_include_offline: true
+    vbguest_auto_update: true
+  production:
+    hostmanager_manage_host: false
+    hostmanager_include_offline: true
+    vbguest_auto_update: false

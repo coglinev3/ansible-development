@@ -4,6 +4,8 @@
 # Include box configuration from YAML file boxes.yml
 require 'yaml'
 boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
+config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
+current_config = config['vagrant_config'][config['vagrant_config']['env']]
 
 
 # set defaul Language for each virtual machine to C
@@ -17,10 +19,11 @@ Vagrant.configure(2) do |config|
 
   # configure the hostmanager plugin
   config.hostmanager.enabled = false
-  config.hostmanager.manage_host = false
   config.hostmanager.manage_guest = true
+  config.hostmanager.manage_host = current_config['hostmanager_manage_host']
+  config.hostmanager.include_offline = current_config['hostmanager_include_offline']
   config.hostmanager.ignore_private_ip = false
-  config.hostmanager.include_offline = true
+
 
   # Box Configuration for Ansible Clients
   boxes.each do |box|
@@ -28,6 +31,8 @@ Vagrant.configure(2) do |config|
       config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
         subconfig.vm.box = box["image"]
         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
+        # Configure vbguesṫ auto updates
+        subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
         subconfig.vm.hostname = "#{box['hostname']}#{i}"
         subconfig.vm.provider "libvirt" do |libvirt, override|
           libvirt.cpus = 1
