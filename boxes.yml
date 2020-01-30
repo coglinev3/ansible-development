@@ -43,6 +43,16 @@
   hostname: debian-buster-node
   vbox_name: 'Debian (Buster) - Node'
   nodes: 1
+- image: generic/fedora30
+  start: true
+  hostname: fedora30-node
+  vbox_name: 'Fedora 30 - Node'
+  nodes: 1
+- image: generic/fedora31
+  start: true
+  hostname: fedora31-node
+  vbox_name: 'Fedora 31 - Node'
+  nodes: 1
 - image: ubuntu/trusty64
   start: true
   hostname: ubuntu-trusty-node

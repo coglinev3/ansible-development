@@ -58,7 +58,7 @@
     - name: Gather facts for EL host(s)
       setup: # aka gather_facts
 
-- hosts: all
+- hosts: os
   become: true
   roles:
     - { role: coglinev3.ansible-common }

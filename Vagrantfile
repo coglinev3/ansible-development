@@ -108,7 +108,7 @@ Vagrant.configure(2) do |config|
       ansible.verbose = false
       # ansible.vault_password_file = "provisioning/.ansible_vault"
       # ansible.ask_vault_pass = true
-      ansible.limit = "all" # or only "nodes" group, etc.
+      ansible.limit = "os" # or only "nodes" group, etc.
       ansible.install = true
       ansible.inventory_path = "provisioning/inventory.ini"
       # pass environment variable to ansible, for example:
