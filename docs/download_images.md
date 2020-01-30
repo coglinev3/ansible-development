@@ -3,9 +3,13 @@
 Vagrant boxes can be downloaded separately from
 [Vagrant Cloud](https://app.vagrantup.com/) if needed.
 
+- [Alpine 3.9](https://app.vagrantup.com/generic/boxes/alpine39 "Alpine 3.9")
+- [Alpine 3.10](https://app.vagrantup.com/generic/boxes/alpine310 "Alpine 3.10")
 - [CentOS 6](https://app.vagrantup.com/centos/boxes/6 "CentOS 6")
 - [CentOS 7](https://app.vagrantup.com/centos/boxes/7 "CentOS 7")
 - [CentOS 8](https://app.vagrantup.com/generic/boxes/centos8 "CentOS 8")
+- [Fedora 30](https://app.vagrantup.com/generic/boxes/fedora30 "Fedora 30")
+- [Fedora 31](https://app.vagrantup.com/generic/boxes/fedora31 "Fedora 31")
 - [Ubuntu/Trusty64](https://app.vagrantup.com/ubuntu/boxes/trusty64 "Ubuntu 14.04 LTS (Trusty Tahr)")
 - [Ubuntu/Xenial64](https://app.vagrantup.com/generic/boxes/ubuntu1604 "Ubuntu 16.04 (Xenial Xerus)")
 - [Ubuntu/Bionic64](https://app.vagrantup.com/generic/boxes/ubuntu1804 "Ubuntu 18.04 (Bionic Beaver)")
@@ -15,16 +19,7 @@ Vagrant boxes can be downloaded separately from
 - [Debian/Buster64](https://app.vagrantup.com/debian/boxes/buster64 "Debian 10 (Buster)")
 
 ```bash
-vagrant box add centos/6
-vagrant box add centos/7
-vagrant box add generic/centos8
-vagrant box add ubuntu/trusty64
-vagrant box add generic/ubuntu1604
-vagrant box add generic/ubuntu1804
-vagrant box add generic/ubuntu1904
-vagrant box add debian/jessie64
-vagrant box add debian/stretch64
-vagrant box add debian/buster64
+vagrant box add <boxname>
 ```
 
 If you already have installed the Vagrant boxes you can upgrade them with:
