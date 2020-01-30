@@ -1,3 +1,9 @@
+# Release 2.3.0
+
+  * Added Fedora 30
+  * Added Fedora 31
+  * Added `config.yml` to configure some Vagrant environment options
+
 # Release 2.2.1
 
   * Set hostmanager.manage_host back to false by default to avoid problems on
