@@ -3,16 +3,16 @@
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://atlas.hashicorp.com/search.
 
-# - image: generic/alpine39
-#   start: true
-#   hostname: alpine39-node
-#   vbox_name: 'Alpine 3.9 - Node'
-#   nodes: 1
-# - image: generic/alpine310
-#   start: true
-#   hostname: alpine310-node
-#   vbox_name: 'Alpine 3.10 - Node'
-#   nodes: 1
+- image: generic/alpine39
+  start: true
+  hostname: alpine39-node
+  vbox_name: 'Alpine 3.9 - Node'
+  nodes: 1
+- image: generic/alpine310
+  start: true
+  hostname: alpine310-node
+  vbox_name: 'Alpine 3.10 - Node'
+  nodes: 1
 - image: centos/6
   start: true
   hostname: el6-node
@@ -43,6 +43,16 @@
   hostname: debian-buster-node
   vbox_name: 'Debian (Buster) - Node'
   nodes: 1
+- image: generic/fedora30
+  start: true
+  hostname: fedora30-node
+  vbox_name: 'Fedora 30 - Node'
+  nodes: 1
+- image: generic/fedora31
+  start: true
+  hostname: fedora31-node
+  vbox_name: 'Fedora 31 - Node'
+  nodes: 1
 - image: ubuntu/trusty64
   start: true
   hostname: ubuntu-trusty-node
@@ -62,4 +72,9 @@
   start: true
   hostname: ubuntu-disco-node
   vbox_name: 'Ubuntu (Disco) - Node'
+  nodes: 1
+- image: generic/ubuntu1910
+  start: true
+  hostname: ubuntu-eoan-node
+  vbox_name: 'Ubuntu (Eoan) - Node'
   nodes: 1

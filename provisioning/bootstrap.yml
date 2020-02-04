@@ -6,7 +6,7 @@
   roles:
     - { role: coglinev3.vagrant-ansible-init }
 
-- hosts: ubuntu_nodes
+- hosts: ubuntu_trusty_nodes
   gather_facts: False
   become: true
   # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
@@ -17,9 +17,10 @@
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
       register: output
       changed_when: output.stdout != ""
-    - setup: # aka gather_facts
+    - name: Gather facts for Ubuntu Trusty
+      setup: # aka gather_facts
 
-- hosts: ubuntu_nodes:!ubuntu-trusty
+- hosts: ubuntu_nodes:!ubuntu_trusty_nodes
   gather_facts: False
   become: true
   pre_tasks:
@@ -27,12 +28,13 @@
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
       register: output
       changed_when: output.stdout != ""
-    - setup: # aka gather_facts
+    - name: Gather facts for Ubuntu host(s)
+      setup: # aka gather_facts
 
 - hosts: alpine_nodes
   gather_facts: False
   become: true
-  # This will install python if missing on Alpine 
+  # This will install python if missing on Alpine
   pre_tasks:
     - name: Install dhclinet
       raw:  test -e /usr/sbin/dhclient || (apk update && apk add dhclient)
@@ -42,9 +44,21 @@
       raw: test -e /usr/bin/python3 || (apk update && apk add python3)
       register: python
       changed_when: python.stdout != ""
-    - setup: # aka gather_facts
+    - name: Gather facts for Alpine host(s)
+      setup: # aka gather_facts
 
-- hosts: all
+- hosts: el8_nodes
+  gather_facts: False
+  become: true
+  pre_tasks:
+    - name: Install python3 for Ansible
+      raw: test -e /usr/bin/python3 || (yum -y update && yum install -y python3)
+      register: output
+      changed_when: output.stdout != ""
+    - name: Gather facts for EL host(s)
+      setup: # aka gather_facts
+
+- hosts: os
   become: true
   roles:
     - { role: coglinev3.ansible-common }

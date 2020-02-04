@@ -9,16 +9,21 @@ clients).
 
 The supported clients are:
 
+* Alpine 3.9,
+* Alpine 3.10,
 * CentOS 6, 
 * CentOS 7, 
 * CentOS 8, 
+* Debian 8 (Jessie),
+* Debian 9 (Stretch),
+* Debian 10 (Buster),
+* Fedora 30,
+* Fedora 31.
 * Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
-* Ubuntu 19.04 (Disco Dingo),
-* Debian 8 (Jessie),
-* Debian 9 (Stretch) and
-* Debian 10 (Buster).
+* Ubuntu 19.04 (Disco Dingo) and
+* Ubuntu 19.10 (Eoan Ermine).
 
 
 It is desigend for developing and testing Ansible playbooks and roles on
@@ -114,7 +119,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.2.0
+Release: 2.3.0
 
 
 ## License
