@@ -14,12 +14,14 @@ The following files and directories are the main components of this Multi-VM Vag
     │   ├── requirements.yml
     │   └── test-playbook
     ├── boxes.yml
+    ├── config.yml
     └── Vagrantfile
 ```
 Within the ansible management node, called master, the host directory `<your_path>/ansible-development` is provided under the path `/vagrant`.
 
 - **boxes.yml**: Contains the Box definitions für this Multi-VM environment.
-- **Vagrantfile**: Every Vagrant environment needs a [Vagrantfile](https://www.vagrantup.com/docs/vagrantfile/ "Vagrantfile"). The primary function of the Vagrantfile is to describe the type of machine required for a project, and how to configure and provision these machines. 
+- **config.yml**: With config.yml you can configure some options for your Vagrant environment without touching the Vagrantfile.
+- **Vagrantfile**: Every Vagrant environment needs a [Vagrantfile](https://www.vagrantup.com/docs/vagrantfile/ "Vagrantfile"). The primary function of the Vagrantfile is to describe the type of machines required for a project, and how to configure and provision these machines. 
 - **provisioning/requirements.yml**: Requirements for installing needed Ansible roles from [Ansible Galaxy](https://galaxy.ansible.com/ "Ansible Galaxy is Ansible’s official hub for sharing Ansible content.") (or your own git repository)
 - **provisioning/inventory.ini**: [Ansible Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html "Ansible Inventory file") file
 - **provisioning/bootstrap.yml**: [Ansible Playbook](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html "Ansible PLaybook") for the initial deployment of all nodes, including the master node
@@ -82,71 +84,48 @@ Attribute description:
     inventory file `/vagrant/provisioning/inventory.ini` in order to use the
     machine with Ansible.
 
-# Order of Vagrant providers
+# Environment type specific configuration
 
+A few settings can be made using `config.yml` without changing the
+Vagrantfile.
 
-This Vagrant environment supports two providers: VirtualBox and libvirt.
-VirtualBox is the default provider, so it comes first.
-
-!!! Note "Vagrantfile: Order of providers"
+!!! Note "Vagrantfile: Include environment configuration"
     ```bash
-      config.vm.provider "virtualbox"
-      config.vm.provider "libvirt"
-    
+    # Include environment configuration from YAML file config.yml
+    require 'yaml'
+    config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
+    # Get current environment from variable 'env'
+    current_config = config['vagrant_config'][config['vagrant_config']['env']]
     ```
-!!! attention
-    You can't use both providers at the same time.
 
-If you want to use libvirt you can change the order in the Vagrantfile or
-specіfy libvirt via environment variable `VAGRANT_DEFAULT_PROVIDER`,
-for example:
-```bash
-VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
-```
-Another way is to specify the provider with the option `--provider`
-```bash
-vagrant up --provider libvirt
-```
+The variable `env` in `config.yml` controls which environment type is currently used.
 
-# Configure the hostmanager plugin
-
-[vagrant-hostmanager](https://github.com/devopsgroup-io/vagrant-hostmanager) is
-a Vagrant plugin that manages the hosts file on guest machines (and optionally
-on the host). Its goal is to enable name resolution of multi-machine environments.
-
-!!! Note "Vagrantfile: Configure hostmanager plugin"
-    ```bash
-      config.hostmanager.enabled = false
-      config.hostmanager.manage_host = false
-      config.hostmanager.manage_guest = true
-      config.hostmanager.ignore_private_ip = false
-      config.hostmanager.include_offline = true
+!!! Note "config.yml"
+    ```yml
+    ---
+    vagrant_config:
+      env: 'production'
+      staging:
+        hostmanager_manage_host: true
+        hostmanager_include_offline: true
+        vbguest_auto_update: true
+      production:
+        hostmanager_manage_host: false
+        hostmanager_include_offline: true
+        vbguest_auto_update: false
     ```
-Configuration options
 
-- **hostmanager.manage_host**: Update the `hosts` file on the hosts's machine.
-- **hostmanager.manage_guest**: Update the `hosts` file on the guest machines.
-- **hostmanager.ignore_private_ip**: A machine's IP address is defined by either the static IP for a private network configuration or by the SSH host configuration. To disable using the private network IP address, set config.hostmanager.ignore_private_ip to true.
-- **hostmanager.include_offline**: If the attribute is set to true, boxes that are up or have a private ip configured will be added to the hosts file.
-- **hostmanager.enabled**: Starting at Vagrant version 1.5.0, vagrant up runs hostmanager before any provisioning occurs. If you would like hostmanager to run after or during your provisioning stage, you can use hostmanager as a provisioner. This allows you to use the provisioning order to ensure that hostmanager runs when desired. The provisioner will collect hosts from boxes with the same provider as the running box.
+With `config.yml` you can define different environments with different values for:
 
-!!! Note "Use Vagrant plugin hostmanager as provisioner"
-    ```bash
-    # Disable the default hostmanager behavior
-    config.hostmanager.enabled = false
+- **hostmanager_manage_host**: Update the `hosts` file on the hosts's machine.
+- **hostmanager_include_offline**: If the attribute is set to `true`, boxes that are up or have a private ip configured will be added to the hosts file.
+- **vbguest_auto_update**: Set vbguest_auto_update to `false`, if you do NOT want to check the correct version of VirtualBox Guest Additions on the guest system when booting the machine
 
-    # ... possible provisioner config before hostmanager ...
-
-    # hostmanager provisioner
-    config.vm.provision :hostmanager
-
-    # ... possible provisioning config after hostmanager ...
-    ```
 
 !!! attention "Update the hosts file on the hosts's machine."
     If you want to manage the hosts file on the host's computer, ensure that you have write access to the hosts file, before you set
     ```bash
-    config.hostmanager.manage_host = true
+    hostmanager_manage_host: false
     ```
 
     **Linux:**
@@ -189,6 +168,63 @@ Configuration options
 
     Due to limitations caused by UAC, cancelling out of the UAC prompt will not cause any
     visible errors, however the hosts file will not be updated.
+
+# Order of Vagrant providers
+
+
+This Vagrant environment supports two providers: VirtualBox and libvirt.
+VirtualBox is the default provider, so it comes first.
+
+!!! Note "Vagrantfile: Order of providers"
+    ```bash
+      config.vm.provider "virtualbox"
+      config.vm.provider "libvirt"
+    
+    ```
+!!! attention
+    You can't use both providers at the same time.
+
+If you want to use libvirt you can change the order in the Vagrantfile or
+specіfy libvirt via environment variable `VAGRANT_DEFAULT_PROVIDER`,
+for example:
+```bash
+VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
+```
+Another way is to specify the provider with the option `--provider`
+```bash
+vagrant up --provider libvirt
+```
+
+# Configure the hostmanager plugin
+
+[vagrant-hostmanager](https://github.com/devopsgroup-io/vagrant-hostmanager) is
+a Vagrant plugin that manages the hosts file on guest machines (and optionally
+on the host). Its goal is to enable name resolution of multi-machine environments.
+
+!!! Note "Vagrantfile: Configure hostmanager plugin"
+    ```bash
+      config.hostmanager.enabled = false
+      config.hostmanager.manage_guest = true
+      config.hostmanager.ignore_private_ip = false
+    ```
+Configuration options
+
+- **hostmanager.enabled**: Starting at Vagrant version 1.5.0, vagrant up runs hostmanager before any provisioning occurs. If you would like hostmanager to run after or during your provisioning stage, you can use hostmanager as a provisioner. This allows you to use the provisioning order to ensure that hostmanager runs when desired. The provisioner will collect hosts from boxes with the same provider as the running box.
+- **hostmanager.manage_guest**: Update the `hosts` file on the guest machines.
+- **hostmanager.ignore_private_ip**: A machine's IP address is defined by either the static IP for a private network configuration or by the SSH host configuration. To disable using the private network IP address, set config.hostmanager.ignore_private_ip to true.
+
+!!! Note "Use Vagrant plugin hostmanager as provisioner"
+    ```bash
+    # Disable the default hostmanager behavior
+    config.hostmanager.enabled = false
+
+    # ... possible provisioner config before hostmanager ...
+
+    # hostmanager provisioner
+    config.vm.provision :hostmanager
+
+    # ... possible provisioning config after hostmanager ...
+    ```
 
 # Start up Ansible clients
 

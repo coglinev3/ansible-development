@@ -71,7 +71,7 @@ sudo yum -y install nfs-utils
 
 ## Initial Provisioning
 
-The next step will start all CentOS, Ubuntu and Debian nodes and the Ansible
+The next step will start all Ansible Clients and the Ansible
 management node. While starting the first time Vagrant will be run any
 configured provisioners against the running managed machines.
 
@@ -83,10 +83,15 @@ configured provisioners against the running managed machines.
     and provisioned in sequence. Then the environment is ready for the
     development and testing of new Ansible playbooks and roles.
 
+### Provider VirtualBox
+
+The Vagrant environment can be started with the provider VirtualBox as follows.
 
 ```bash
 vagrant up
 ```
+
+### Provider libvirt
 
 If you want to use vagrant with libvirt instead of VirtualBox, use
 ```bash
