@@ -416,6 +416,8 @@ As result here is the whole Vagrantfile.
     # Include box configuration from YAML file boxes.yml
     require 'yaml'
     boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
+    config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
+    current_config = config['vagrant_config'][config['vagrant_config']['env']]
     
     
     # set defaul Language for each virtual machine to C
@@ -429,10 +431,11 @@ As result here is the whole Vagrantfile.
     
       # configure the hostmanager plugin
       config.hostmanager.enabled = false
-      config.hostmanager.manage_host = true
       config.hostmanager.manage_guest = true
+      config.hostmanager.manage_host = current_config['hostmanager_manage_host']
+      config.hostmanager.include_offline = current_config['hostmanager_include_offline']
       config.hostmanager.ignore_private_ip = false
-      config.hostmanager.include_offline = true
+    
     
       # Box Configuration for Ansible Clients
       boxes.each do |box|
@@ -440,18 +443,25 @@ As result here is the whole Vagrantfile.
           config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
             subconfig.vm.box = box["image"]
             subconfig.vm.synced_folder ".", "/vagrant", disabled: true
+            # Configure vbguesṫ auto updates
+            subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
             subconfig.vm.hostname = "#{box['hostname']}#{i}"
             subconfig.vm.provider "libvirt" do |libvirt, override|
+              libvirt.cpus = 1
               libvirt.memory = "512"
-              libvirt.nested = true
+              libvirt.nested = false
             end
             subconfig.vm.provider "virtualbox" do |vbox, override|
               # Don't install VirtualBox guest additions with vagrant-vbguest
               # plugin, because this doesn't work under Alpine Linux
               if box["image"] =~ /alpine/
                 override.vbguest.auto_update = false
+                override.vm.provision "shell",
+                  inline: "test -e /usr/sbin/dhclient || (echo nameserver 10.0.2.3 > /etc/resolv.conf && apk add --update dhclient)"
               end
               vbox.gui = false
+              vbox.memory = 512
+              vbox.cpus = 1
               vbox.name = "#{box['vbox_name']} #{i}"
               vbox.linked_clone = true
               vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
@@ -488,7 +498,7 @@ As result here is the whole Vagrantfile.
           override.vm.synced_folder ".", "/vagrant", type: "nfs"
         end
         subconfig.vm.provider "virtualbox" do |vbox, override|
-          vbox.memory = "4096"
+          vbox.memory = "1024"
           vbox.gui = false
           vbox.name = "Management Node"
           vbox.linked_clone = true
@@ -510,7 +520,7 @@ As result here is the whole Vagrantfile.
           ansible.verbose = false
           # ansible.vault_password_file = "provisioning/.ansible_vault"
           # ansible.ask_vault_pass = true
-          ansible.limit = "all" # or only "nodes" group, etc.
+          ansible.limit = "os" # or only "nodes" group, etc.
           ansible.install = true
           ansible.inventory_path = "provisioning/inventory.ini"
           # pass environment variable to ansible, for example:
