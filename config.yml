@@ -1,6 +1,6 @@
 ---
 vagrant_config:
-  env: 'staging'
+  env: 'production'
   staging:
     hostmanager_manage_host: true
     hostmanager_include_offline: true
