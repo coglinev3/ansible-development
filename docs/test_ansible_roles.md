@@ -25,16 +25,6 @@ cd <path>/ansible-development
 vagrant up && vagrant ssh
 ```
 
-### Environment preparation on Ansible master node
-
-On the management node open the file `/etc/ansible/ansible.cfg` and check the
-variables *inventory* and *roles_path*. They should have the following values:
-
-```ini
-inventory  = /vagrant/provisioning/inventory.ini
-roles_path = /vagrant/provisioning/roles:/etc/ansible/roles:/usr/share/ansible/roles
-```
-
 ### Check if the environment is ready
 
 Control if the ansible environment is working with:
@@ -43,8 +33,13 @@ Control if the ansible environment is working with:
 ansible all -m ping
 ```
  
-All clients that were up and running and specified in the inventory file
-`/vagrant/provisioning/inventory.ini` should positiv respond to this command.
+All clients that were up and running and dynamicaly added to the inventory file
+`/vagrant/provisioning/vagrant.ini` should positiv respond to this command.
+
+!!! attention "Manualy configured inventory file"
+    If you use a manualy configured inventory file instead of the dynamicaly
+    configured inventory file (which is the default) then you have to specify
+    your Ansible clients in `/vagrant/provisioning/inventory.ini` on your own.
 
 
 ## Create a new Ansible role

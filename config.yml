@@ -5,7 +5,9 @@ vagrant_config:
     hostmanager_manage_host: true
     hostmanager_include_offline: true
     vbguest_auto_update: true
+    dynamic_inventory: true
   production:
     hostmanager_manage_host: false
     hostmanager_include_offline: true
     vbguest_auto_update: false
+    dynamic_inventory: true
