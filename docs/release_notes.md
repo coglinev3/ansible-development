@@ -1,6 +1,6 @@
 # Release Notes for Version 2.4.0
 
-  * Added new feature 'dynamic_inventory' to automaticaly create the Ansible
+  * Added new feature *dynamic_inventory* to automaticaly create the Ansible
   inventory file
 
 # Release Notes for Version 2.3.0
