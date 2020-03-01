@@ -73,7 +73,7 @@ sudo yum -y install nfs-utils
 
 Your Ansible development environment requires at least one virtual machine 
 (Vagrant box) with a [supported operating system](/#supported-operating-systems "Supported Operating Systemѕ").
-Open the file boxes.yml and enter your Ansible clients here, e.g.:
+Open the file `boxes.yml` and enter your Ansible clients here, e.g.:
 
 !!! Note "boxes.yml"
     ```yaml
@@ -93,7 +93,7 @@ Open the file boxes.yml and enter your Ansible clients here, e.g.:
 
 This will start three nodes with CentOS 8 and one node with Debian Buster. See
 section "[Define Vagrant Boxes](/vagrantfile/#define-vagrant-boxes)" for more
-details on configuring the boxes.yml file.
+details on configuring the `boxes.yml` file.
 
 
 ## Initial Provisioning
