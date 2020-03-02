@@ -5,6 +5,9 @@ environment which represents a real life [Ansible](http://docs.ansible.com/ansib
 scenario with one Ansible management node and different Linux OS nodes (Ansible
 clients):
 ![Ansible figure](ansible_figure.svg)
+
+## Supported Operating Systems
+
 The supported clients are:
 
 * Alpine 3.9,
@@ -23,6 +26,8 @@ The supported clients are:
 * Ubuntu 19.04 (Disco Dingo) and
 * Ubuntu 19.10 (Eoan Ermine).
 
+
+## Purpose
 
 It is desigend for developing and testing Ansible playbooks and roles on
 these operating systems. The configuration can be easily changed to support

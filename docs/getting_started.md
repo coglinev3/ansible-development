@@ -69,6 +69,33 @@ sudo apt install -y nfs-kernel-server
 sudo yum -y install nfs-utils
 ```
 
+## Define Ansible Client(s)
+
+Your Ansible development environment requires at least one virtual machine 
+(Vagrant box) with a [supported operating system](/#supported-operating-systems "Supported Operating Systemѕ").
+Open the file `boxes.yml` and enter your Ansible clients here, e.g.:
+
+!!! Note "boxes.yml"
+    ```yaml
+    ---
+    - image: generic/centos8
+      start: true
+      hostname: el8-node
+      vbox_name: 'EL8 - Node'
+      nodes: 3
+    - image: generic/debian10
+      start: true
+      hostname: debian-buster-node
+      vbox_name: 'Debian (Buster) - Node'
+      nodes: 1
+
+    ```
+
+This will start three nodes with CentOS 8 and one node with Debian Buster. See
+section "[Define Vagrant Boxes](/vagrantfile/#define-vagrant-boxes)" for more
+details on configuring the `boxes.yml` file.
+
+
 ## Initial Provisioning
 
 The next step will start all Ansible Clients and the Ansible
@@ -83,7 +110,7 @@ configured provisioners against the running managed machines.
     and provisioned in sequence. Then the environment is ready for the
     development and testing of new Ansible playbooks and roles.
 
-### Provider VirtualBox
+### Provisioning with provider VirtualBox
 
 The Vagrant environment can be started with the provider VirtualBox as follows.
 
@@ -91,7 +118,7 @@ The Vagrant environment can be started with the provider VirtualBox as follows.
 vagrant up
 ```
 
-### Provider libvirt
+### Provisioning with provider libvirt
 
 If you want to use vagrant with libvirt instead of VirtualBox, use
 ```bash
@@ -103,7 +130,7 @@ VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up --no-parallel
     in parallel. It happens that Ansible Provisioner is running on the master
     node before all Ansible clients are up and running. Therefore, the Ansible
     Provisioner sometimes can not reach all clients through SSH from the master
-    node, and Ansible fails for the affected clients. Therefore, when starting
+    node, and Ansible fails for the affected clients. That's why when starting
     the environment for the first time, the parallel installation should be
     suppressed using the vagrant option `--no-parallel`.
     

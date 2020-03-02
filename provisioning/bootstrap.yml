@@ -6,60 +6,52 @@
   roles:
     - { role: coglinev3.vagrant-ansible-init }
 
-- hosts: ubuntu_trusty_nodes
-  gather_facts: False
+- hosts: nodes
   become: true
-  # This will install python2 if missing on ubuntu (but checks first so no expensive repeated
-  # apt updates)
-  # Thanks for discussion on https://gist.github.com/gwillem/4ba393dceb55e5ae276a87300f6b8e6f
-  pre_tasks:
-    - name: Install python for Ansible
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-      register: output
-      changed_when: output.stdout != ""
-    - name: Gather facts for Ubuntu Trusty
-      setup: # aka gather_facts
-
-- hosts: ubuntu_nodes:!ubuntu_trusty_nodes
-  gather_facts: False
-  become: true
-  pre_tasks:
-    - name: Install python3 for Ansible
-      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
-      register: output
-      changed_when: output.stdout != ""
-    - name: Gather facts for Ubuntu host(s)
-      setup: # aka gather_facts
-
-- hosts: alpine_nodes
-  gather_facts: False
-  become: true
-  # This will install python if missing on Alpine
-  pre_tasks:
-    - name: Install dhclinet
-      raw:  test -e /usr/sbin/dhclient || (apk update && apk add dhclient)
-      register: dhclient
-      changed_when: dhclient.stdout != ""
-    - name: Install python for Ansible
-      raw: test -e /usr/bin/python3 || (apk update && apk add python3)
-      register: python
-      changed_when: python.stdout != ""
-    - name: Gather facts for Alpine host(s)
-      setup: # aka gather_facts
-
-- hosts: el8_nodes
-  gather_facts: False
-  become: true
-  pre_tasks:
-    - name: Install python3 for Ansible
-      raw: test -e /usr/bin/python3 || (yum -y update && yum install -y python3)
-      register: output
-      changed_when: output.stdout != ""
-    - name: Gather facts for EL host(s)
-      setup: # aka gather_facts
-
-- hosts: os
-  become: true
+  gather_facts: false
+  pre_tasks: # Install Python if needed
+    - name: Check if Platform Python exists
+      raw: test -e /usr/libexec/platform-python
+      register: check_platform_python
+      changed_when: false
+      failed_when: false
+    - name: Check if Python 3 exists
+      raw: test -e /usr/bin/python3
+      register: check_python3
+      changed_when: false
+      failed_when: false
+    - name: Check if Python exists
+      raw: test -e /usr/bin/python
+      register: install_python
+      changed_when: install_python.rc != 0
+      failed_when: false
+      when: (check_platform_python.rc !=0) and (check_python3.rc != 0)
+    - name: Install Python if needed on Alpine systems
+      raw: test -e /sbin/apk && (apk add --no-cache python)
+      register: apk_system
+      failed_when: false
+      changed_when: apk_system.rc == 0
+      when: install_python.changed == true
+    - name: Install Python if needed on Debian based systems
+      raw: test -e /usr/bin/apt && (apt install -y python-minimal)
+      register: apt_system
+      failed_when: false
+      changed_when: apt_system.rc == 0
+      when: install_python.changed == true
+    - name: Install Python if needed on Enterprise Linux systems
+      raw: test -e /usr/bin/yum && (yum -y install python)
+      register: yum_system
+      failed_when: false
+      changed_when: yum_system.rc == 0
+      when: install_python.changed == true
+    - name: Install Python if needed on Fedora systems
+      raw: test -e /usr/bin/dnf && (dnf -y install python2)
+      register: dnf_system
+      failed_when: false
+      changed_when: dnf_system.rc == 0
+      when: install_python.changed == true
+    - name: Gather facts
+      setup: # aka gather_facts 
   roles:
     - { role: coglinev3.ansible-common }
     - { role: sansible.users_and_groups }

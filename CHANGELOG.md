@@ -1,3 +1,8 @@
+# Release 2.4.0
+
+  * Added new feature 'dynamic_inventory' to automaticaly create the Ansible
+  inventory file
+
 # Release 2.3.0
 
   * Added Fedora 30

@@ -119,7 +119,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.3.0
+Release: 2.4.0
 
 
 ## License
@@ -129,4 +129,4 @@ GPLv3
 
 ## Author Information
 
-This Vagrant environment was created in 2019 by Cogline.v3.
+This Vagrant environment was created in 2020 by Cogline.v3.
