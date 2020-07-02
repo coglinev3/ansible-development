@@ -9,47 +9,10 @@
 - hosts: nodes
   become: true
   gather_facts: false
-  pre_tasks: # Install Python if needed
-    - name: Check if Platform Python exists
-      raw: test -e /usr/libexec/platform-python
-      register: check_platform_python
-      changed_when: false
-      failed_when: false
-    - name: Check if Python 3 exists
-      raw: test -e /usr/bin/python3
-      register: check_python3
-      changed_when: false
-      failed_when: false
-    - name: Check if Python exists
-      raw: test -e /usr/bin/python
-      register: install_python
-      changed_when: install_python.rc != 0
-      failed_when: false
-      when: (check_platform_python.rc !=0) and (check_python3.rc != 0)
-    - name: Install Python if needed on Alpine systems
-      raw: test -e /sbin/apk && (apk add --no-cache python)
-      register: apk_system
-      failed_when: false
-      changed_when: apk_system.rc == 0
-      when: install_python.changed == true
-    - name: Install Python if needed on Debian based systems
-      raw: test -e /usr/bin/apt && (apt install -y python-minimal)
-      register: apt_system
-      failed_when: false
-      changed_when: apt_system.rc == 0
-      when: install_python.changed == true
-    - name: Install Python if needed on Enterprise Linux systems
-      raw: test -e /usr/bin/yum && (yum -y install python)
-      register: yum_system
-      failed_when: false
-      changed_when: yum_system.rc == 0
-      when: install_python.changed == true
-    - name: Install Python if needed on Fedora systems
-      raw: test -e /usr/bin/dnf && (dnf -y install python2)
-      register: dnf_system
-      failed_when: false
-      changed_when: dnf_system.rc == 0
-      when: install_python.changed == true
+  pre_tasks:
+    - name: "Install Python if needed"
+      include_role:
+        name: "coglinev3.ansible_python"
     - name: Gather facts
       setup: # aka gather_facts 
   roles:
