@@ -102,7 +102,8 @@ Vagrant.configure(2) do |config|
 
   # Box configuration for Ansible Management Node
   config.vm.define "master", primary: true do |subconfig|
-    subconfig.vm.box = 'centos/7'
+    #subconfig.vm.box = 'centos/7'
+    subconfig.vm.box = 'generic/centos8'
     subconfig.vm.hostname = "master"
     subconfig.vm.provider "libvirt" do |libvirt, override|
       libvirt.memory = "1024"
