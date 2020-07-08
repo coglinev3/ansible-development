@@ -1,0 +1,3 @@
+#pymdown-extensions>=6.2,<6.3
+pymdown-extensions>=7.1
+Markdown>=3.2
