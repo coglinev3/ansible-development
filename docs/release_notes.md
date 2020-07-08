@@ -1,3 +1,15 @@
+# Release Notes for Version 2.5.0
+
+  * Added Alpine 3.9
+  * Added Alpine 3.10
+  * Added Alpine 3.11
+  * Added Alpine 3.12
+  * Added Fedora 32
+  * Added Ubuntu 20.04 TLS (Focal Fossa)
+  * Removed Ubuntu 19.04 (Disco Dingo) - End of Life
+  * Replace pre_task statements for python installation with role ansible_python
+  * Set python interpreter discovery for Ansible to 'auto'
+
 # Release Notes for Version 2.4.0
 
   * Added new feature *dynamic_inventory* to automaticaly create the Ansible

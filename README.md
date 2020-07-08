@@ -11,6 +11,8 @@ The supported clients are:
 
 * Alpine 3.9,
 * Alpine 3.10,
+* Alpine 3.11,
+* Alpine 3.12,
 * CentOS 6, 
 * CentOS 7, 
 * CentOS 8, 
@@ -19,11 +21,12 @@ The supported clients are:
 * Debian 10 (Buster),
 * Fedora 30,
 * Fedora 31.
+* Fedora 32.
 * Ubuntu 14.04 LTS (Trusty Tahr),
 * Ubuntu 16.04 LTS (Xenial Xerus),
 * Ubuntu 18.04 LTS (Bionic Beaver),
-* Ubuntu 19.04 (Disco Dingo) and
-* Ubuntu 19.10 (Eoan Ermine).
+* Ubuntu 19.10 (Eoan Ermine) and
+* Ubuntu 20.04 TLS (Focal Fossa).
 
 
 It is desigend for developing and testing Ansible playbooks and roles on
