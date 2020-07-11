@@ -122,7 +122,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.5.0
+Release: 2.5.1
 
 
 ## License
