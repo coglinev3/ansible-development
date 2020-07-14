@@ -1,3 +1,10 @@
+# Release Notes for Version 2.5.1
+
+  * Set default boxes to:
+    * CentOS 8
+    * Debian 10 (Buster)
+    * Ubuntu 20.04 TLS (Focal Fossa)
+
 # Release Notes for Version 2.5.0
 
   * Added Alpine 3.9
