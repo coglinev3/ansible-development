@@ -4,6 +4,10 @@
   version: master
   name: coglinev3.vagrant-ansible-init
 
+- src: coglinev3.ansible_python
+  version: master
+  name: coglinev3.ansible_python
+
 - src: coglinev3.ansible-common
   version: master
   name: coglinev3.ansible-common

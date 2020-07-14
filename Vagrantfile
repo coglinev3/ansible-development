@@ -102,7 +102,7 @@ Vagrant.configure(2) do |config|
 
   # Box configuration for Ansible Management Node
   config.vm.define "master", primary: true do |subconfig|
-    subconfig.vm.box = 'centos/7'
+    subconfig.vm.box = 'generic/centos8'
     subconfig.vm.hostname = "master"
     subconfig.vm.provider "libvirt" do |libvirt, override|
       libvirt.memory = "1024"
@@ -124,6 +124,10 @@ Vagrant.configure(2) do |config|
       end # resolving_vm
     end # virtualbox
     subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
+    subconfig.vm.provision "shell", inline: <<-SHELL
+      echo -n                                       >  /etc/profile.d/ansible.sh
+      echo 'export ANSIBLE_PYTHON_INTERPRETER=auto' >> /etc/profile.d/ansible.sh
+    SHELL
     subconfig.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "provisioning/bootstrap.yml"
       # ansible.provisioning_path = "/vagrant"

@@ -13,12 +13,22 @@
 #  hostname: alpine310-node
 #  vbox_name: 'Alpine 3.10 - Node'
 #  nodes: 1
-#- image: centos/6
+#- image: generic/alpine311
+#  start: true
+#  hostname: alpine311-node
+#  vbox_name: 'Alpine 3.11 - Node'
+#  nodes: 1
+#- image: generic/alpine312
+#  start: true
+#  hostname: alpine312-node
+#  vbox_name: 'Alpine 3.12 - Node'
+#  nodes: 1
+#- image: generic/centos6
 #  start: true
 #  hostname: el6-node
-#  vbox_name: 'EL6 - Node'
+#  vbox_name: 'EL7 - Node'
 #  nodes: 1
-#- image: centos/7
+#- image: generic/centos7
 #  start: true
 #  hostname: el7-node
 #  vbox_name: 'EL7 - Node'
@@ -27,7 +37,7 @@
   start: true
   hostname: el8-node
   vbox_name: 'EL8 - Node'
-  nodes: 2
+  nodes: 1
 #- image: generic/debian8
 #  start: true
 #  hostname: debian-jessie-node
@@ -43,15 +53,20 @@
   hostname: debian-buster-node
   vbox_name: 'Debian (Buster) - Node'
   nodes: 1
-#- image: fedora/30-cloud-base
+#- image: generic/fedora30
 #  start: true
 #  hostname: fedora30-node
 #  vbox_name: 'Fedora 30 - Node'
 #  nodes: 1
-#- image: fedora/31-cloud-base
+#- image: generic/fedora31
 #  start: true
 #  hostname: fedora31-node
 #  vbox_name: 'Fedora 31 - Node'
+#  nodes: 1
+#- image: generic/fedora32
+#  start: true
+#  hostname: fedora32-node
+#  vbox_name: 'Fedora 32 - Node'
 #  nodes: 1
 #- image: ubuntu/trusty64
 #  start: true
@@ -68,13 +83,13 @@
 #  hostname: ubuntu-bionic-node
 #  vbox_name: 'Ubuntu (Bionic) - Node'
 #  nodes: 1
-#- image: generic/ubuntu1904
-#  start: true
-#  hostname: ubuntu-disco-node
-#  vbox_name: 'Ubuntu (Disco) - Node'
-#  nodes: 1
 #- image: generic/ubuntu1910
 #  start: true
 #  hostname: ubuntu-eoan-node
 #  vbox_name: 'Ubuntu (Eoan) - Node'
 #  nodes: 1
+- image: generic/ubuntu2004
+  start: true
+  hostname: ubuntu-focal-node
+  vbox_name: 'Ubuntu (Focal) - Node'
+  nodes: 1
