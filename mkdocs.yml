@@ -1,5 +1,4 @@
 ---
-#site_name: Ansible development with Vagrant and VirtualBox
 site_name: Vagrant Environment for Testing Ansible Roles
 
 site_description: A Multi-VM Vagrant environment for Developing and Testing Ansible Roles.
@@ -7,6 +6,13 @@ site_author: Cogline.v3
 
 repo_url: https://gitlab.com/cogline_vagrant/ansible-development
 edit_uri: https://gitlab.com/cogline_vagrant/ansible-development/tree/master/docs
+
+theme:
+  name: readthedocs
+  hljs_languages:
+    - yaml
+    - dosini
+    - rust
 
 nav:
   - Multi-VM Vagrant environment: index.md
@@ -21,13 +27,6 @@ nav:
   - About:
     - Release Notes: release_notes.md
     - License: LICENSE.md
-
-theme:
-  name: readthedocs
-  hljs_languages:
-    - yaml
-    - dosini
-    - rust
 
 extra_css:
   - css/extra.css
