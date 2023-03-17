@@ -8,7 +8,7 @@ site_author: Cogline.v3
 repo_url: https://gitlab.com/cogline_vagrant/ansible-development
 edit_uri: https://gitlab.com/cogline_vagrant/ansible-development/tree/master/docs
 
-pages:
+nav:
   - Multi-VM Vagrant environment: index.md
   - Motivation: motivation.md
   - Getting Started: getting_started.md
@@ -27,6 +27,7 @@ theme:
   hljs_languages:
     - yaml
     - dosini
+    - rust
 
 extra_css:
   - css/extra.css
@@ -48,7 +49,7 @@ extra:
       link: 'https://github.com/coglinev3/vagrant-ansible-init'
   version: 2.5.1
 
-copyright: Copyright &copy; 2020 Cogline.v3. Release 2.5.0.
+copyright: Copyright &copy; 2023 Cogline.v3. Release 2.5.0.
 
 google_analytics: ['UA-136839613-1', 'ansible-development.readthedocs.io']
 

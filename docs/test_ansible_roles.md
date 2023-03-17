@@ -17,24 +17,61 @@ for save and restore the state of a virtual machine.
 
 ### Logon to the mangement node
 
-Change to the project directory, start the virtual machines with vagrangt if they are not
+Change to the project directory, start the virtual machines with vagrant if they are not
 already started, and log in to the ansible management node via ssh.
 
 ```bash
-cd <path>/ansible-development
+cd <path_on_your_host_system>/ansible-development
 vagrant up && vagrant ssh
+```
+If the machines are already running, the following command is enough to log into the Ansible management node.
+
+```bash
+vagrant ssh
 ```
 
 ### Check if the environment is ready
 
-Control if the ansible environment is working with:
+Control if the ansible environment is working. On the Ansible management node call:
 
 ```bash
 ansible all -m ping
 ```
  
 All clients that were up and running and dynamicaly added to the inventory file
-`/vagrant/provisioning/vagrant.ini` should positiv respond to this command.
+`/vagrant/provisioning/vagrant.ini` should positiv respond to this command, for example:
+
+```json
+localhost | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.10"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+el9-node1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+fedora37-node1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+debian11-node1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+```
 
 !!! attention "Manualy configured inventory file"
     If you use a manualy configured inventory file instead of the dynamicaly

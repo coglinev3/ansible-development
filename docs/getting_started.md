@@ -13,12 +13,12 @@ This setup was tested under Windows 10 with the following components:
 * [Vagrant = 2.2.6](https://www.vagrantup.com/)
 * [Ansible = 2.8.2](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
 
-and under Ubuntu 16.04 LTS (Xenial Xerus) and Ubuntu 18.04 LTS (Bionic Beaver) with:
+and under Ubuntu 22.04 LTS (Jammy Jellyfish) with
 
-* [VirtualBox = 6.0.10](https://www.virtualbox.org/)
-* [libvirt = 4.0.0](https://libvirt.org/index.html)
-* [Vagrant = 2.2.6](https://www.vagrantup.com/)
-* [Ansible = 2.9.0](http://docs.ansible.com/ansible/)
+* [VirtualBox = 7.0.6](https://www.virtualbox.org/)
+* [libvirt = 8.0.0](https://libvirt.org/index.html)
+* [Vagrant = 2.3.4](https://www.vagrantup.com/)
+* [Ansible = 2.14.2](http://docs.ansible.com/ansible/)
 
 preinstalled.
 
@@ -29,7 +29,8 @@ preinstalled.
 
 ## Get the Vagrant Environment
 
-For the next steps open a bash (under Windows a cygwin bash) on the virtual host system.
+For the next steps open a bash (under Windows a WSL2 bash) on the virtual host system.
+Under Windows you can open bash with [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/ "WSL Documentation") (WSL).
 
 ### Download Vagrant box configuration
 
@@ -53,6 +54,7 @@ Before using this Vagrant environment, you still need to install the following p
 ```bash
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-hostmanager
+vagrant plugin install vagrant-timezone
 ```
 
 If you use Vagrant with libvirt under Linux, you also need to install the
@@ -73,25 +75,25 @@ sudo yum -y install nfs-utils
 
 Your Ansible development environment requires at least one virtual machine 
 (Vagrant box) with a [supported operating system](/#supported-operating-systems "Supported Operating Systemѕ").
-Open the file `boxes.yml` and enter your Ansible clients here, e.g.:
+Open the file `boxes.yml` and enter or uncomment your Ansible clients here, e.g.:
 
 !!! Note "boxes.yml"
     ```yaml
     ---
-    - image: generic/centos8
+    - image: generic/debian11
       start: true
-      hostname: el8-node
-      vbox_name: 'EL8 - Node'
+      hostname: debian-bullseye-node
+      vbox_name: 'Debian (Bullseye) - Node'
       nodes: 3
-    - image: generic/debian10
+    - image: generic/ubuntu2204
       start: true
-      hostname: debian-buster-node
-      vbox_name: 'Debian (Buster) - Node'
+      hostname: ubuntu2204-node
+      vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
       nodes: 1
 
     ```
 
-This will start three nodes with CentOS 8 and one node with Debian Buster. See
+This will start three nodes with Debian 11 and one node with Ubuntu 22.04 LTS. See
 section "[Define Vagrant Boxes](/vagrantfile/#define-vagrant-boxes)" for more
 details on configuring the `boxes.yml` file.
 
@@ -115,7 +117,7 @@ configured provisioners against the running managed machines.
 The Vagrant environment can be started with the provider VirtualBox as follows.
 
 ```bash
-vagrant up
+VAGRANT_DEFAULT_PROVIDER=virtualbox vagrant up
 ```
 
 ### Provisioning with provider libvirt
