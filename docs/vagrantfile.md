@@ -1,4 +1,6 @@
-# Directory structure
+# The Vagrant environment in detail
+
+## Directory structure
 
 The following files and directories are the main components of this Multi-VM Vagrant environment.
 ```
@@ -40,7 +42,7 @@ roles
     environment is unusable. In most cases, there is no need to change the
     Vagrantfile. Instead, use the options in `boxes.yml` and `config.yml`.
 
-# Define Vagrant Boxes
+## Define Vagrant Boxes
 
 Every Vagrant development environment requires a box. You can search for boxes
 at [Vagrant Cloud](https://app.vagrantup.com/boxes/search "Discover Vagrant Boxes").
@@ -58,21 +60,30 @@ Here's a snippet from the file `boxes.yml`
 !!! Note "Content of boxes.yml"
     ```yaml
     ---
-    - image: centos/6
-      start: true
-      hostname: el6-node
-      vbox_name: 'EL6 - Node'
-      nodes: 1
-    - image: centos/7
-      start: true
-      hostname: el7-node
-      vbox_name: 'EL7 - Node'
-      nodes: 1
-    - image: ubuntu/trusty64
-      start: true
-      hostname: ubuntu-trusty-node
-      vbox_name: 'Ubuntu (Trusty) - Node'
-      nodes: 1
+    # Ansible clients
+    clients:
+      - image: generic/alpine317
+        start: true
+        hostname: alpine317-node
+        cpus: 2
+        vbox_name: 'Alpine 3.17 - Node'
+        nodes: 1
+      - image: generic/alma8
+        start: true
+        hostname: el8-node
+        vbox_name: 'EL8 - Node'
+        nodes: 1
+      - image: generic/alma9
+        start: true
+        hostname: el9-node
+        vbox_name: 'EL9 - Node'
+        nodes: 1
+      - image: generic/ubuntu2204
+        start: true
+        hostname: ubuntu2204-node
+        memory: '1024'
+        vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
+        nodes: 1
 
       ...
 
@@ -83,10 +94,12 @@ You can add your own Vagrant boxes or remove other boxes here if you need.
 Attribute description:
 
 - **image**: A official Vagrant Box/Image, see  [Vagrant Cloud](https://app.vagrantup.com/ "HashiCorp Vagrant Cloud")
-- **start**: Defines if the virtual machine should be started on `vagrant up`
-- **hostname**: The hostname prefix. The real hostname will be *hostname* + *node number*
-- **vbox_name**: The name prefix in Oracles VirtualBox GUI. The real name will be *vbox_name* + *node_number*
-- **nodes**: The number of nodes for this Box/Image
+- **start**: Defines if the virtual machine should be started on `vagrant up`.
+- **hostname**: The hostname prefix. The real hostname will be *hostname* + *node number*.
+- **cpus**: The CPU count. *Default is 1.*
+- **memory**: The main memory size in MB. *Default is 512.*
+- **vbox_name**: The name prefix in the VirtualBox GUI. The real name will be *vbox_name* + *node_number*.
+- **nodes**: The number of nodes for this Box/Image. *Default is 1.**
 
 !!! attention
     If you are not using the dynamic inventory file
@@ -96,18 +109,27 @@ Attribute description:
     with Ansible ,
 
 
-# Environment type specific configuration
+## Environment type specific configuration
 
 A few settings can be made using `config.yml` without changing the
 Vagrantfile.
 
 !!! Note "Vagrantfile: Include environment configuration"
-    ```bash
-    # Include environment configuration from YAML file config.yml
+    ```ruby
+    # -*- mode: ruby -*-
+    # vi: set ft=ruby :
+
     require 'yaml'
+    # Include box configuration from YAML file boxes.yml
+    boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
+    # Include environment configuration from YAML file config.yml
     config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
     # Get current environment from variable 'env'
     current_config = config['vagrant_config'][config['vagrant_config']['env']]
+    # Get configuration for each Ansible client
+    ansible_client = boxes['clients']
+    # Get configuration for Ansible management node
+    ansible_master = boxes['master']
     ```
 
 The variable *env* in `config.yml` controls which environment type is currently
@@ -119,23 +141,26 @@ used.
     vagrant_config:
       env: 'production'
       staging:
+        dynamic_inventory: true
         hostmanager_manage_host: true
         hostmanager_include_offline: true
+        provider: libvirt
         vbguest_auto_update: true
-        dynamic_inventory: true
       production:
+        dynamic_inventory: true
         hostmanager_manage_host: false
         hostmanager_include_offline: true
+        provider: virtualbox
         vbguest_auto_update: false
-        dynamic_inventory: true
     ```
 
 With `config.yml` you can define different environments with different values for:
 
+- **dynamic_inventory**: If `dynamic_inventory` is set to *true* the file `provisioning/vagrant.ini` will be uses as the Ansible inventory file. It will be dynamicly build, which is recommended. This way, you can add or remove new hosts in [boxes.yml](#define-vagrant-boxes) without having to worry about customizing the Ansible inventory file too. If `dynamic_inventory` is set to *false* `provisioning/inventory.ini` will be used as inventory file. You have to change this file manualy every time you add or remove new hosts (Ansible Clients). 
 - **hostmanager_manage_host**: Update the `hosts` file on the hosts's machine.
 - **hostmanager_include_offline**: If the attribute is set to `true`, boxes that are up or have a private ip configured will be added to the hosts file.
+- **provider**: Define the Vagrant provider. Valid values are `virtualbox` or `libvirt`.
 - **vbguest_auto_update**: Set vbguest_auto_update to `false`, if you do NOT want to check the correct version of VirtualBox Guest Additions on the guest system when booting the machine
-- **dynamic_inventory**: If `dynamic_inventory` is set to *true* the file `provisioning/vagrant.ini` will be uses as the Ansible inventory file. It will be dynamicly build, which is recommended. This way, you can add or remove new hosts in [boxes.yml](#define-vagrant-boxes) without having to worry about customizing the Ansible inventory file too. If `dynamic_inventory` is set to *false* `provisioning/inventory.ini` will be used as inventory file. You have to change this file manualy every time you add or remove new hosts (Ansible Clients). 
 
 
 !!! attention "Update the hosts file on the hosts's machine."
@@ -185,11 +210,11 @@ With `config.yml` you can define different environments with different values fo
     Due to limitations caused by UAC, cancelling out of the UAC prompt will not cause any
     visible errors, however the hosts file will not be updated.
 
-# Order of Vagrant providers
+## Vagrant providers
 
 
 This Vagrant environment supports two providers: VirtualBox and libvirt.
-VirtualBox is the default provider, so it comes first.
+The provider is set in the file `config.yml` (see [Environment type specific configuration](#environment-type-specific-configuration))).
 
 !!! Note "Vagrantfile: Order of providers"
     ```bash
@@ -204,30 +229,33 @@ If you want to use libvirt you can change the order in the Vagrantfile or
 specіfy libvirt via environment variable `VAGRANT_DEFAULT_PROVIDER`,
 for example:
 ```bash
-VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+vagrant up
 ```
 Another way is to specify the provider with the option `--provider`
 ```bash
 vagrant up --provider libvirt
 ```
 
-# Configure the hostmanager plugin
+## Configure the hostmanager plugin
 
 [vagrant-hostmanager](https://github.com/devopsgroup-io/vagrant-hostmanager) is
-a Vagrant plugin that manages the hosts file on guest machines (and optionally
-on the host). Its goal is to enable name resolution of multi-machine environments.
+a Vagrant plugin that manages the `/etc/hosts` file on guest machines (and optionally
+on the host).
 
 !!! Note "Vagrantfile: Configure hostmanager plugin"
     ```bash
       config.hostmanager.enabled = false
       config.hostmanager.manage_guest = true
       config.hostmanager.ignore_private_ip = false
+      config.hostmanager.include_offline = true
     ```
-Configuration options
+Hostmanager configuration options
 
-- **hostmanager.enabled**: Starting at Vagrant version 1.5.0, vagrant up runs hostmanager before any provisioning occurs. If you would like hostmanager to run after or during your provisioning stage, you can use hostmanager as a provisioner. This allows you to use the provisioning order to ensure that hostmanager runs when desired. The provisioner will collect hosts from boxes with the same provider as the running box.
+- **hostmanager.enabled**: Starting at Vagrant version 1.5.0, `vagrant up` runs hostmanager before any provisioning occurs. If you would like hostmanager to run after or during your provisioning stage, you can use hostmanager as a provisioner. This allows you to use the provisioning order to ensure that hostmanager runs when desired. The provisioner will collect hosts from boxes with the same provider as the running box.
 - **hostmanager.manage_guest**: Update the `hosts` file on the guest machines.
-- **hostmanager.ignore_private_ip**: A machine's IP address is defined by either the static IP for a private network configuration or by the SSH host configuration. To disable using the private network IP address, set config.hostmanager.ignore_private_ip to true.
+- **hostmanager.ignore_private_ip**: A machine's IP address is defined by either the static IP for a private network configuration or by the SSH host configuration. To disable using the private network IP address, set hostmanager.ignore_private_ip to `true`.
+- **hostmanager.include_offline**: If the attribute is set to true, boxes that are up or have a private ip configured will be added to the `hosts` file.
 
 !!! Note "Use Vagrant plugin hostmanager as provisioner"
     ```bash
@@ -242,7 +270,7 @@ Configuration options
     # ... possible provisioning config after hostmanager ...
     ```
 
-# Start up Ansible clients
+## Start up Ansible clients
 
 Next, Ansible clients are started using the defined boxes in variable `boxes`. This
 requires two loops:
@@ -255,8 +283,10 @@ Within a `Vagrantfile` the construct `array.each do |index|` or
 
 !!! Note "Vagrantfile: Loops for boxes and nodes"
     ```ruby
-    boxes.each do |box|
-      (1..box[:nodes]).each do |i|
+    ansible_client.each do |box|
+      # If the nodes option is not set in `boxes.yml`, 1 is used by default.
+      box_nodes = box["nodes"] || 1
+      (1..box_nodes).each do |i|
 
       ...
       
@@ -264,144 +294,147 @@ Within a `Vagrantfile` the construct `array.each do |index|` or
     end
     ```
 
-Then, for each node, the definition of the virtual machine comes:
+In the inner loop will be defined for each node:
 
-- which image to use, 
-- the hostname of the virtual machine, 
-- provider specific configuration, like memory or private networks,
-- configuration of provisioners
+- which image should be used,
+- what is the hostname,
+- which specific configuration (such as main memory or CPUs) should be used,
+- which provisioniers are to be executed,
+etc.
 
-and so on.
 
 !!! Note "Vagrantfile: definition for each node"
     ```ruby
-       config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
-         subconfig.vm.box = box["image"]
-         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-         subconfig.vm.hostname = "#{box['hostname']}#{i}"
-         # configuration for provider libvirt
-         subconfig.vm.provider "libvirt" do |libvirt, override|
-           libvirt.memory = "512"
-           # get DHCP-assigned private network ip-address
-           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-             if hostname = (vm.ssh_info && vm.ssh_info[:host])
-               `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[0]
-             end
-           end
-         end
-         # configuration for provider VirtualBox
-         subconfig.vm.provider "virtualbox" do |vbox, override|
-           vbox.gui = false
-           vbox.name = "#{box['vbox_name']} #{i}"
-           vbox.linked_clone = true
-           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
-           override.vm.network "private_network", type: "dhcp"
-           # get DHCP-assigned private network ip-address
-           override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-             if hostname = (vm.ssh_info && vm.ssh_info[:host])
-               `vagrant ssh "#{box['hostname']}#{i}" -c "hostname -I"`.split()[1]
-             end
-           end
-         end
-         # execute the provisioners for each node
-         subconfig.vm.provision :hostmanager
-         subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
-       end
+    config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
+      subconfig.vm.box = box["image"]
+      subconfig.vm.synced_folder ".", "/vagrant", disabled: true
+      if Vagrant.has_plugin?("vagrant-vbguest")
+        subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
+      end # plugin
+      subconfig.vm.hostname = "#{box['hostname']}#{i}"
+      subconfig.vm.provider "libvirt" do |libvirt, override|
+        libvirt.cpus = box["cpus"] || 1
+        libvirt.memory = box["memory"] || 512
+        libvirt.nested = false
+      end # libvirt
+      subconfig.vm.provider "virtualbox" do |vbox, override|
+        # Don't install VirtualBox guest additions on Alpine Linux with
+        # vagrant-vbguest plugin, because this doesn't work under Alpine Linux.
+        if box["image"] =~ /alpine/
+          if Vagrant.has_plugin?("vagrant-vbguest")
+            override.vbguest.auto_update = false
+          end # plugin vagrant-vbguest
+        end # if alpine
+        vbox.gui = false
+        vbox.cpus = box["cpus"] || 1
+        vbox.memory = box["memory"] || 512
+        vbox.name = "#{box['vbox_name']} #{i}"
+        vbox.linked_clone = true
+        vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+        vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        override.vm.network "private_network", type: "dhcp"
+        # get DHCP-assigned private network ip-address
+        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+          if hostname = (vm.ssh_info && vm.ssh_info[:host])
+            # detect private network ip address on every Linux OS
+            `vagrant ssh "#{box['hostname']}#{i}" -c  "ip addr show eth1|grep -v ':'|egrep -o '([0-9]+\.){3}[0-9]+'"`.split(' ')[0]
+          end # if
+        end # resolving_vm
+      end # virtualbox
+      subconfig.vm.provision "time zone data", type: "shell", path: "provisioning/scripts/install_tzdata"
+      if Vagrant.has_plugin?("vagrant-timezone")
+        subconfig.timezone.value = :host
+      end # plugin vagrant-timezone
+    end # subconfig
+
+    # dynamically create the Ansible inventory file
+    if current_config['dynamic_inventory']
+      File.open("#{ANSIBLE_INVENTORY_FILE}" ,'a') do | f |
+        f.write "#{box['hostname']}#{i}    ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.#{box['hostname']}#{i}\n"
+      end
+    end
     ```
 
-!!! attention "Timezone problem"
-    The Vagrant timezone configuration doesn't work correctly.  That's why I
-    use the solution from [Frédéric Henri](https://stackoverflow.com/users/4296747/fr%c3%a9d%c3%a9ric-henri)
-    with the shell provisioner, see [stackoverflow](https://stackoverflow.com/questions/33939834/how-to-correct-system-clock-in-vagrant-automatically "How to correct system clock in vagrant automatically")
-    You have to replace 'Europe/Berlin' with the timezone you want to set.
+## Start up Ansible Management Node
 
+Now follows the configuration for the Ansible management node named `master`.
+The configuration is similar to the clients, except that the current directory
+is mounted with the `synced_folder` option as directory `/vagrant` inside the
+master node.
 
-# Start up Ansible Management Node (master)
-
-Now comes the configuration of the Ansible management node called `master`.
-It is the same configuration as for the clients, except that here CentOS 7
-is explicitly specified as operating system and the current directory is
-mounted with the option synced_folder as directory `/vagrant` within the master
-node. Finally, Ansible runs to automatically provision all virtual machines.
-The Ansible Provisioner will then be explained in a separate section.
+The Ansible Provisioner will be explained in a separate section.
 
 !!! Note "Vagrantfile: Master node definition"
     ```ruby
-      # Box configuration for Ansible Management Node
-      config.vm.define "master", primary: true do |subconfig|
-        subconfig.vm.box = 'centos/7'
-        subconfig.vm.hostname = "master"
-        subconfig.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+    # Box configuration for Ansible Management Node
+    config.vm.define "master", primary: true do |subconfig|
+      subconfig.vm.box = ansible_master['image']
+      subconfig.vm.hostname = "master"
+      subconfig.vm.provider "libvirt" do |libvirt, override|
+        libvirt.cpus = ansible_master['cpus'] || 1
+        libvirt.memory = ansible_master['memory'] || 512
+        override.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_udp: false
+      end # libvirt
+      subconfig.vm.provider "virtualbox" do |vbox, override|
+        vbox.cpus = ansible_master['cpus'] || 1
+        vbox.memory = ansible_master['memory'] || 512
+        vbox.gui = false
+        vbox.name = ansible_master['vbox_name'] || 'Management Node'
+        vbox.linked_clone = true
+        vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
+        vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        override.vm.network "private_network", type: "dhcp"
+        override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
+        override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
           if hostname = (vm.ssh_info && vm.ssh_info[:host])
             `vagrant ssh -c "hostname -I"`.split()[1]
-          end
-        end
-        # configuration for provider libvirt
-        subconfig.vm.provider "libvirt" do |libvirt, override|
-          libvirt.memory = "1024"
-          # synced folder via nfs requires the NFS Kernel Server on the host system
-          override.vm.synced_folder ".", "/vagrant", type: "nfs"
-          override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            if hostname = (vm.ssh_info && vm.ssh_info[:host])
-              `vagrant ssh -c "hostname -I"`.split()[0]
-            end
-          end
-        end
-        # configuration for provider VirtualBox
-        subconfig.vm.provider "virtualbox" do |vbox, override|
-          vbox.memory = "4096"
-          vbox.gui = false
-          vbox.name = "Management Node"
-          vbox.linked_clone = true
-          vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
-          override.vm.network "private_network", type: "dhcp"
-          override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
-          override.hostmanager.ip_resolver = proc do |vm, resolving_vm|
-            if hostname = (vm.ssh_info && vm.ssh_info[:host])
-              `vagrant ssh -c "hostname -I"`.split()[1]
-            end
-          end
-        end
-        subconfig.vm.provision :hostmanager
-        subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
+          end # if
+        end # resolving_vm
+      end # virtualbox
+      subconfig.vm.provision "time zone data", type: "shell", path: "provisioning/scripts/install_tzdata"
+      if Vagrant.has_plugin?("vagrant-timezone")
+        subconfig.timezone.value = :host
+      end # plugin vagrant-timezone
         ...
         # Ansible provisioning
         ...
       end
     ```
 
-# Define and create Ansible inventory file
+## Define and create Ansible inventory file
 
 First define which inventory file to use:
 
 * dynamic_inventory = **true**: `provisioning/vagrant.ini`
 * dynamic_inventory = **false**: `provisioning/inventory.ini`
 
-If a dynymic inventory file is used create one inventory group for the
-management node and one for all other nodes.
+When a dynamic inventory file is used, one inventory group is created for the
+management node and one inventory group for all other nodes.
 
 !!! Note "Define inventory file"
-    ```bash
-      if current_config['dynamic_inventory']
-        # define dynamic inventory file
-        ANSIBLE_INVENTORY_FILE = "provisioning/vagrant.ini"
-        
-        # create or overwrite inventory file
-        File.open("#{ANSIBLE_INVENTORY_FILE}" ,'w') do | f |
-          f.write "[management_node]\nlocalhost    ansible_connection=local ansible_host=127.0.0.1\n"
-          f.write "\n"
-          f.write "[nodes]\n"
-        end
-      else
-        ANSIBLE_INVENTORY_FILE = "provisioning/inventory.ini"
+    ```ruby
+    if current_config['dynamic_inventory']
+      # define dynamic inventory file
+      ANSIBLE_INVENTORY_FILE = "provisioning/vagrant.ini"
+      
+      # create or overwrite inventory file
+      File.open("#{ANSIBLE_INVENTORY_FILE}" ,'w') do | f |
+        f.write "[management_node]\nlocalhost    ansible_connection=local ansible_host=127.0.0.1\n"
+        f.write "\n"
+        f.write "[management_node:vars]\n"
+        f.write "ansible_python_interpreter=auto_silent\n"
+        f.write "\n"
+        f.write "[nodes]\n"
       end
+    else
+      ANSIBLE_INVENTORY_FILE = "provisioning/inventory.ini"
+    end
     ```
-
-In the Loop for the Ansible clients (see [Start Ansible clients](#start-up-ansible-clients))
-add every node to the dynamic inventory file.
+In the clients loop (see [Start Ansible clients](#start-up-ansible-clients)),
+each node is added to the dynamic inventory file.
 
 !!! Note "Add every node to the dynamic inventory file"
-    ```bash
+    ```ruby
     # dynamically create the Ansible inventory file
     if current_config['dynamic_inventory']
       File.open("#{ANSIBLE_INVENTORY_FILE}" ,'a') do | f |
@@ -428,7 +461,7 @@ the Ansible Playbook.
     end # provision ansible_local
     ```
 
-# Provisioning with Ansible
+## Provisioning with Ansible
 
 The Ansible provisioner from the master node will setup each node.
 
@@ -452,36 +485,36 @@ The Ansible provisioner from the master node will setup each node.
     ```
 
 The provisioner executes the playbook `bootstrap.yml` from the directory `provisioning`
-while using `inventory.ini`as Ansible inventory file.
+while using `vagrant.ini` or `inventory.ini`as Ansible inventory file.
 If you want to use the Ansible Vault feature with your roles see section "[Use roles with Ansible Vault feature](test_ansible_roles.md#use-roles-with-ansible-vault-feature 'Ansible Vault feature')" for details to activate this feature.
 
 !!! attention "provisioning/inventory.ini"
     If you change the images or the number of nodes in `boxes.yml` and you
     won't use the dynamicaly created inventory file, you must also change the
     ansible inventory file` inventory.ini`.
-    For example, if you change the number of CentOS 6 nodes from one to three,
-    you should add two more nodes to the group [el6-nodes] to start and configure them.
+    For example, if you change the number of Enterprise Linux 9 nodes from one to three,
+    you should add two more nodes to the group [el8-nodes] to start and configure them.
     ```dosini
     #  ansible inventory file
     
     [management-node]
     localhost   ansible_connection=local ansible_host=127.0.0.1
     
-    [el6-nodes]
-    el6-node1	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el6-node1
-    el6-node2	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el6-node2
-    el6-node2	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el6-node3
+    [el9-nodes]
+    el9-node1	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el9-node1
+    el9-node2	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el9-node2
+    el9-node2	ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.el9-node3
     
     ...
 
     ```
 
-    After that you can start and provision then new nodes with:
+    After that you can start and provision the new nodes with:
     ```bash
     vagrant up --provision
     ```
 
-# The whole Vagrantfile
+## The whole Vagrantfile
 
 On the previous sections, the structure of the Vagrant file was explained step by step.
 As result here is the whole Vagrantfile.
@@ -496,10 +529,13 @@ As result here is the whole Vagrantfile.
     boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
     config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
     current_config = config['vagrant_config'][config['vagrant_config']['env']]
+    ansible_client = boxes['clients']
+    ansible_master = boxes['master']
     
     
     # set defaul Language for each virtual machine to C
-    ENV["LANG"] = "C"
+    # ENV["LANG"] = "C"
+    ENV["LANG"] = "C.UTF-8"
     
     Vagrant.configure(2) do |config|
     
@@ -511,6 +547,9 @@ As result here is the whole Vagrantfile.
         File.open("#{ANSIBLE_INVENTORY_FILE}" ,'w') do | f |
           f.write "[management_node]\nlocalhost    ansible_connection=local ansible_host=127.0.0.1\n"
           f.write "\n"
+          f.write "[management_node:vars]\n"
+          f.write "ansible_python_interpreter=auto_silent\n"
+          f.write "\n"
           f.write "[nodes]\n"
         end
       else
@@ -518,8 +557,8 @@ As result here is the whole Vagrantfile.
       end
     
       # define the order of providers 
-      config.vm.provider "virtualbox"
       config.vm.provider "libvirt"
+      config.vm.provider "virtualbox"
     
       # configure the hostmanager plugin
       config.hostmanager.enabled = false
@@ -530,29 +569,33 @@ As result here is the whole Vagrantfile.
     
     
       # Box Configuration for Ansible Clients
-      boxes.each do |box|
+      ansible_client.each do |box|
         (1..box["nodes"]).each do |i|
           config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
             subconfig.vm.box = box["image"]
             subconfig.vm.synced_folder ".", "/vagrant", disabled: true
-            subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
+            if Vagrant.has_plugin?("vagrant-vbguest")
+              subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
+            end # plugin
             subconfig.vm.hostname = "#{box['hostname']}#{i}"
             subconfig.vm.provider "libvirt" do |libvirt, override|
-              libvirt.cpus = 1
-              libvirt.memory = "512"
+              libvirt.cpus = box["cpus"] || 1
+              libvirt.memory = box["memory"] || 512
               libvirt.nested = false
             end # libvirt
             subconfig.vm.provider "virtualbox" do |vbox, override|
               # Don't install VirtualBox guest additions with vagrant-vbguest
               # plugin, because this doesn't work under Alpine Linux
               if box["image"] =~ /alpine/
-                override.vbguest.auto_update = false
+                if Vagrant.has_plugin?("vagrant-vbguest")
+                  override.vbguest.auto_update = false
+                end # plugin
                 override.vm.provision "shell",
                   inline: "test -e /usr/sbin/dhclient || (echo nameserver 10.0.2.3 > /etc/resolv.conf && apk add --update dhclient)"
               end # if alpine
               vbox.gui = false
-              vbox.memory = 512
-              vbox.cpus = 1
+              vbox.cpus = box["cpus"] || 1
+              vbox.memory = box["memory"] || 512
               vbox.name = "#{box['vbox_name']} #{i}"
               vbox.linked_clone = true
               vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
@@ -566,10 +609,10 @@ As result here is the whole Vagrantfile.
                 end # if
               end # resolving_vm
             end # virtualbox
-            # The Vagrant timezone configuration doesn't work correctly.
-            # That's why I use the solution from Frédéric Henri, see: https://stackoverflow.com/questions/33939834/how-to-correct-system-clock-in-vagrant-automatically
-            # You have to replace 'Europe/Berlin' with the timezone you want to set.
-            subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
+            subconfig.vm.provision "time zone data", type: "shell", path: "provisioning/scripts/install_tzdata"
+            if Vagrant.has_plugin?("vagrant-timezone")
+              subconfig.timezone.value = :host
+            end # plugin vagrant-timezone
           end # subconfig
     
           # dynamically create the Ansible inventory file
@@ -586,22 +629,26 @@ As result here is the whole Vagrantfile.
         # finish inventory file
         File.open("#{ANSIBLE_INVENTORY_FILE}" ,'a') do | f |
           f.write "\n"
-          f.write "[nodes:vars]\nansible_ssh_user=vagrant\n"
+          f.write "[nodes:vars]\n"
+          f.write "ansible_ssh_user=vagrant\n"
+          f.write "ansible_python_interpreter=auto_silent\n"
         end
       end
     
       # Box configuration for Ansible Management Node
       config.vm.define "master", primary: true do |subconfig|
-        subconfig.vm.box = 'generic/centos8'
+        subconfig.vm.box = ansible_master['image']
         subconfig.vm.hostname = "master"
         subconfig.vm.provider "libvirt" do |libvirt, override|
-          libvirt.memory = "1024"
-          override.vm.synced_folder ".", "/vagrant", type: "nfs"
+          libvirt.cpus = ansible_master['cpus'] || 1
+          libvirt.memory = ansible_master['memory'] || 512
+          override.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_udp: false
         end # libvirt
         subconfig.vm.provider "virtualbox" do |vbox, override|
-          vbox.memory = "1024"
+          vbox.cpus = ansible_master['cpus'] || 1
+          vbox.memory = ansible_master['memory'] || 512
           vbox.gui = false
-          vbox.name = "Management Node"
+          vbox.name = ansible_master['vbox_name'] || 'Management Node'
           vbox.linked_clone = true
           vbox.customize ["modifyvm", :id, "--groups", "/Ansible"]
           vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -613,7 +660,10 @@ As result here is the whole Vagrantfile.
             end # if
           end # resolving_vm
         end # virtualbox
-        subconfig.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime"
+        subconfig.vm.provision "time zone data", type: "shell", path: "provisioning/scripts/install_tzdata"
+        if Vagrant.has_plugin?("vagrant-timezone")
+          subconfig.timezone.value = :host
+        end # plugin vagrant-timezone
         subconfig.vm.provision "shell", inline: <<-SHELL
           echo -n                                       >  /etc/profile.d/ansible.sh
           echo 'export ANSIBLE_PYTHON_INTERPRETER=auto' >> /etc/profile.d/ansible.sh
