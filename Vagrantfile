@@ -1,9 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Include box configuration from YAML file boxes.yml
 require 'yaml'
+# Include box configuration from YAML file boxes.yml
 boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
+# Include environment configuration from YAML file config.yml
 config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
 current_config = config['vagrant_config'][config['vagrant_config']['env']]
 ansible_client = boxes['clients']
@@ -33,21 +34,21 @@ Vagrant.configure(2) do |config|
     ANSIBLE_INVENTORY_FILE = "provisioning/inventory.ini"
   end
 
-  # define the order of providers 
-  config.vm.provider "libvirt"
-  config.vm.provider "virtualbox"
+  # define the provider (virtualbox | libvirt)
+  config.vm.provider current_config['provider']
 
   # configure the hostmanager plugin
-  config.hostmanager.enabled = false
-  config.hostmanager.manage_guest = true
+  config.hostmanager.enabled = current_config['hostmanager_enabled']
+  config.hostmanager.manage_guest = current_config['hostmanager_manage_guest']
   config.hostmanager.manage_host = current_config['hostmanager_manage_host']
   config.hostmanager.include_offline = current_config['hostmanager_include_offline']
-  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.ignore_private_ip = current_config['hostmanager_ignore_private_ip']
 
 
   # Box Configuration for Ansible Clients
   ansible_client.each do |box|
-    (1..box["nodes"]).each do |i|
+    box_nodes = box["nodes"] || 1
+    (1..box_nodes).each do |i|
       config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
         subconfig.vm.box = box["image"]
         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
@@ -61,14 +62,12 @@ Vagrant.configure(2) do |config|
           libvirt.nested = false
         end # libvirt
         subconfig.vm.provider "virtualbox" do |vbox, override|
-          # Don't install VirtualBox guest additions with vagrant-vbguest
-          # plugin, because this doesn't work under Alpine Linux
+          # Don't install VirtualBox guest additions on Alpine Linux with
+          # vagrant-vbguest plugin, because this doesn't work under Alpine Linux.
           if box["image"] =~ /alpine/
             if Vagrant.has_plugin?("vagrant-vbguest")
               override.vbguest.auto_update = false
-            end # plugin
-            override.vm.provision "shell",
-              inline: "test -e /usr/sbin/dhclient || (echo nameserver 10.0.2.3 > /etc/resolv.conf && apk add --update dhclient)"
+            end # plugin vagrant-vbguest
           end # if alpine
           vbox.gui = false
           vbox.cpus = box["cpus"] || 1

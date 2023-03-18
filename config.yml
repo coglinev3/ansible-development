@@ -2,12 +2,20 @@
 vagrant_config:
   env: 'staging'
   staging:
+    dynamic_inventory: true
+    hostmanager_enabled: false
+    hostmanager_manage_guest: true
     hostmanager_manage_host: true
     hostmanager_include_offline: true
+    hostmanager_ignore_private_ip: false
     vbguest_auto_update: true
-    dynamic_inventory: true
+    provider: libvirt
   production:
+    dynamic_inventory: true
+    hostmanager_enabled: false
+    hostmanager_manage_guest: true
     hostmanager_manage_host: false
     hostmanager_include_offline: true
+    hostmanager_ignore_private_ip: false
     vbguest_auto_update: false
-    dynamic_inventory: true
+    provider: virtualbox

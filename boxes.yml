@@ -3,12 +3,14 @@
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://atlas.hashicorp.com/search.
 
+# Ansible management node
 master:
   image: generic/alpine317
   start: true
-  cpus: 2
+  cpus: 1
   vbox_name: 'Management Node'
 
+# Ansible clients
 clients:
   #- image: generic/alpine314
   #  start: true
@@ -60,7 +62,6 @@ clients:
     hostname: debian11-node
     memory: '1024'
     vbox_name: 'Debian 11 (Bullseye) - Node'
-    nodes: 1
   #- image: generic/fedora35
   #  start: true
   #  hostname: fedora35-node
