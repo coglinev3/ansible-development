@@ -19,21 +19,21 @@ nav:
   - Motivation: motivation.md
   - Getting Started: getting_started.md
   - Developing and Testing Ansible Roles: test_ansible_roles.md
-  - The Vagrant environment in detail: vagrantfile.md 
-  - Vagrant provider specific tasks: 
+  - The Vagrant environment in detail: vagrantfile.md
+  - Vagrant provider specific tasks:
       - 'VirtualBox': 'provider/virtualbox.md'
       - 'libvirt (KVM)': 'provider/libvirt.md'
   - Install and upgrade Vagrant Boxes: download_images.md
   - About:
-    - Release Notes: release_notes.md
-    - License: LICENSE.md
+      - Release Notes: release_notes.md
+      - License: LICENSE.md
 
 extra_css:
   - css/extra.css
 
 markdown_extensions:
   - toc:
-      permalink: True
+      permalink: true
   - admonition
   - def_list
   - extra
