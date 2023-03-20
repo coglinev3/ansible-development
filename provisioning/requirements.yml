@@ -1,16 +1,16 @@
-# Install needed roles from the Ansible Galaxy
+# Install needed roles from Ansible Galaxy
 
-- src: coglinev3.vagrant-ansible-init
+- src: coglinev3.vagrant_ansible_init
   version: master
-  name: coglinev3.vagrant-ansible-init
+  name: coglinev3.vagrant_ansible_init
 
 - src: coglinev3.ansible_python
   version: master
   name: coglinev3.ansible_python
 
-- src: coglinev3.ansible-common
+- src: coglinev3.ansible_common
   version: master
-  name: coglinev3.ansible-common
+  name: coglinev3.ansible_common
 
 # This roles manages OS users and groups.
 - src: sansible.users_and_groups
