@@ -1,6 +1,6 @@
 ---
 vagrant_config:
-  env: 'staging'
+  env: 'production'
   staging:
     dynamic_inventory: true
     hostmanager_enabled: false
