@@ -121,7 +121,7 @@ playbooks and roles.
 
 ## Version
 
-Release: 2.5.1
+Release: 3.0.0
 
 
 ## License
