@@ -7,7 +7,7 @@ the playbook is executed with Vagrant's local Ansible provisioner. For example:
 
 ```ruby hl_lines="2 6"
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "ubuntu/jammy64"
   ...
   # Run Ansible from the Vagrant VM
   config.vm.provision "ansible_local" do |ansible|
@@ -43,7 +43,7 @@ at the following simple example:
 ```yaml
 ---
 - name: Download WAR file to the Tomcat webapps directory
-  maven_artifact:
+  community.general.maven_artifact:
     group_id: com.company
     artifact_id: web-app
     extension: war
@@ -69,7 +69,7 @@ connection like in this example:
 ---
 - name: Download WAR file to the Ansible Management node
   localaction:
-    module: maven_artifact:
+    module: community.general.maven_artifact:
     group_id: com.company
     artifact_id: web-app
     extension: war
@@ -77,7 +77,7 @@ connection like in this example:
     dest: /opt/war/web-app.war
 
 - name: Copy WAR file to the Tomcat webapps directory
-  synchronize:
+  ansible.posix.synchronize:
     src: /opt/war/web-app.war
     dest: /var/lib/tomcat7/webapps/web-app.war
 ```

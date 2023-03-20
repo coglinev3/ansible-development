@@ -5,6 +5,7 @@
   become: true
   roles:
     - { role: coglinev3.vagrant-ansible-init }
+    - { role: coglinev3.ansible_common }
 
 - hosts: nodes
   become: true
@@ -16,6 +17,6 @@
     - name: Gather facts
       setup: # aka gather_facts 
   roles:
-    - { role: coglinev3.ansible-common }
+    - { role: coglinev3.ansible_common }
     - { role: sansible.users_and_groups }
     # - { role: geerlingguy.dotfiles }

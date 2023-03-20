@@ -9,3 +9,5 @@ playbooks
 host_vars
 group_vars
 files
+site
+vagrant.ini

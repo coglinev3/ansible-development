@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+declare -g  OS
+declare -gi ID_LIKE_COUNT
+declare -gi VERSION
+
+ID_LIKE_COUNT=$(cat /etc/os-release | grep -c "ID_LIKE")
+VERSION=$(cat /etc/os-release | grep "^VERSION_ID=" | cut -d "=" -f 2 | sed -e 's/"//g' | sed -e 's/\([[:digit:]]\+\).*/\1/')
+
+if [ $ID_LIKE_COUNT -eq 1 ];
+then
+  OS=$(cat /etc/os-release | grep "^ID_LIKE=" | cut -d "=" -f 2 | sed -e 's/"//g' | cut -d " " -f 1)
+else
+  OS=$(cat /etc/os-release | grep "^ID=" | cut -d "=" -f 2 | sed -e 's/"//g')
+fi
+
+echo -n "Install time zone data..."
+
+case $OS in
+  alpine)
+    sudo apk -q update && sudo apk -q add tzdata
+    ;;
+  debian | ubuntu)
+    sudo apt-get update -qq && sudo apt-get install -y -qq tzdata
+    ;;
+  rhel | centos | fedora)
+    if  [ $VERSION -lt 8 ]; then
+      sudo yum makecache -q && sudo yum install -y -q tzdata > /dev/null
+    else
+      sudo dnf makecache -q && sudo dnf install -y -qq tzdata
+    fi
+    ;;
+  *)
+    echo "failed!"
+    echo "Unknown operating system: $OS"
+    exit -1
+    ;;
+esac
+
+if [ $? -ne 0 ]; then
+  echo "failed!"
+  exit -1
+else
+  echo "done."
+fi
+
+exit 0
