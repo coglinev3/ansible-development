@@ -12,6 +12,33 @@ master:
 
 # Ansible clients
 clients:
+  - image: generic/alpine317
+    start: true
+    hostname: alpine317-node
+    vbox_name: 'Alpine 3.17 - Node'
+    nodes: 1
+  - image: generic/alma9
+    start: true
+    hostname: el9-node
+    vbox_name: 'EL9 - Node'
+    nodes: 1
+  - image: debian/bullseye64
+    start: true
+    hostname: debian11-node
+    memory: '1024'
+    vbox_name: 'Debian 11 (Bullseye) - Node'
+    nodes: 1
+  - image: generic/fedora37
+    start: true
+    hostname: fedora37-node
+    vbox_name: 'Fedora 37 - Node'
+    nodes: 1
+  - image: generic/ubuntu2204
+    start: true
+    hostname: ubuntu2204-node
+    memory: '1024'
+    vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
+    nodes: 1
   #- image: generic/alpine314
   #  start: true
   #  hostname: alpine314-node
@@ -27,11 +54,6 @@ clients:
   #  hostname: alpine316-node
   #  vbox_name: 'Alpine 3.16 - Node'
   #  nodes: 1
-  - image: generic/alpine317
-    start: true
-    hostname: alpine317-node
-    vbox_name: 'Alpine 3.17 - Node'
-    nodes: 1
   #- image: generic/centos7
   #  start: true
   #  hostname: el7-node
@@ -42,11 +64,6 @@ clients:
   #  hostname: el8-node
   #  vbox_name: 'EL8 - Node'
   #  nodes: 1
-  - image: generic/alma9
-    start: true
-    hostname: el9-node
-    vbox_name: 'EL9 - Node'
-    nodes: 1
   #- image: generic/debian9
   #  start: true
   #  hostname: debian9-node
@@ -57,11 +74,6 @@ clients:
   #  hostname: debian10-node
   #  vbox_name: 'Debian 10 (Buster) - Node'
   #  nodes: 1
-  - image: debian/bullseye64
-    start: true
-    hostname: debian11-node
-    memory: '1024'
-    vbox_name: 'Debian 11 (Bullseye) - Node'
   #- image: generic/fedora35
   #  start: true
   #  hostname: fedora35-node
@@ -72,11 +84,6 @@ clients:
   #  hostname: fedora36-node
   #  vbox_name: 'Fedora 36 - Node'
   #  nodes: 1
-  - image: generic/fedora37
-    start: true
-    hostname: fedora37-node
-    vbox_name: 'Fedora 37 - Node'
-    nodes: 1
   #- image: generic/ubuntu1804
   #  start: true
   #  hostname: ubuntu1804-node
@@ -87,9 +94,3 @@ clients:
   #  hostname: ubuntu2004-node
   #  vbox_name: 'Ubuntu 20.04 (Focal Fossa) - Node'
   #  nodes: 1
-  - image: generic/ubuntu2204
-    start: true
-    hostname: ubuntu2204-node
-    memory: '1024'
-    vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
-    nodes: 1
