@@ -18,6 +18,6 @@
   name: sansible.users_and_groups
 
 # Installs a set of dotfiles from a given Git repository.
-#- src: geerlingguy.dotfiles
-#  version: master
-#  name: geerlingguy.dotfiles
+- src: geerlingguy.dotfiles
+  version: master
+  name: geerlingguy.dotfiles
