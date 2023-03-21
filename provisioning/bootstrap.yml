@@ -4,9 +4,13 @@
 - name: Configure Ansible Management Node
   hosts: management_node
   become: true
-  roles:
-    - { role: coglinev3.vagrant_ansible_init }
-    - { role: coglinev3.ansible_common }
+  tasks:
+    - name: Execute role coglinev3.vagrant_ansible_init
+      ansible.builtin.include_role:
+        name: coglinev3.vagrant_ansible_init
+    - name: Execute role coglinev3.ansible_common
+      ansible.builtin.include_role:
+        name: coglinev3.ansible_common
 
 - name: Configure Ansible Clients
   hosts: nodes
@@ -18,7 +22,13 @@
         name: "coglinev3.ansible_python"
     - name: Gather facts
       ansible.builtin.setup: # aka gather_facts
-  roles:
-    - { role: coglinev3.ansible_common }
-    - { role: sansible.users_and_groups }
-    # - { role: geerlingguy.dotfiles }
+  tasks:
+    - name: Execute role coglinev3.ansible_common
+      ansible.builtin.include_role: 
+        name: coglinev3.ansible_common
+    - name: Execute role sansible.users_and_groups
+      ansible.builtin.include_role: 
+        name: sansible.users_and_groups
+#    - name: Execute role geerlingguy.dotfiles
+#      ansible.builtin.include_role: 
+#        name: geerlingguy.dotfiles

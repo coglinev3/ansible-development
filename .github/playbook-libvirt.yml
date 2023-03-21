@@ -1,0 +1,30 @@
+---
+# file: playbook-libvirt.yml
+
+- name: Install requirements.
+  hosts: local
+  become: true
+  tasks:
+    - name: Install libvirt packages
+      ansible.builtin.include_role:
+        name: coglinev3.ansible_common
+      vars:
+        common_packages:
+          - qemu
+          - libvirt-daemon-system
+          - virtinst
+          - bridge-utils
+          - libxslt-dev
+          - libxml2-dev
+          - libvirt-dev
+          - zlib1g-dev
+          - ruby-dev
+    - name: Install Vagrant
+      ansible.builtin.include_role:
+        name: coglinev3.vagrant
+      vars:
+        vagrant_packages:
+          - vagrant
+          - vagrant-libvirt
+          - vagrant-hostmanager
+          - nfs-kernel-server

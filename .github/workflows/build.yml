@@ -1,0 +1,139 @@
+---
+name: Build
+
+# Controls when the workflow will run
+'on':
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+    working-directory: 'ansible-development'
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
+        with:
+          path: 'ansible-development'
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install ansible-lint
+        run: python3 -m pip install --user ansible-lint
+
+      - name: Show versions
+        run: |
+          ansible --version
+          ansible-lint --version
+          yamllint --version
+
+      - name: Lint code with yamllint.
+        run: yamllint .
+
+      - name: Lint code with ansible-lint.
+        run: ansible-lint
+
+  test:
+    name: Provider
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        vagrant_provider: ["virtualbox", "libvirt"]
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v3
+        with:
+          path: 'ansible-development'
+
+      - name: Configure Ansible
+        run: |
+          mkdir -p ~/.ansible/roles
+          cp .github/ansible.cfg ~/.ansible.cfg
+          cp .github/hosts ~/.ansible/hosts
+
+      - name: Show Ansible version
+        run: ansible --version
+
+      - name: Get provider specific Ansible roles
+        run: ansible-galaxy install -r .github/requirements.yml -p ~/.ansible/roles
+
+      - name: Install Vagrant and Provider (${{ matrix.vagrant_provider }})
+        run: ansible-playbook .github/playbook-${{ matrix.vagrant_provider }}.yml
+
+      - name: Start libvirtd
+        if: matrix.vagrant_provider == 'libvirt'
+        run: |
+          sudo systemctl enable libvirtd
+          sudo systemctl start libvirtd
+
+      - name: Start nfs-kernel-server
+        if: matrix.vagrant_provider == 'libvirt'
+        run: |
+          sudo systemctl enable nfs-kernel-server
+          sudo systemctl start nfs-kernel-server
+
+      - name: Add user to group libvirt
+        if: matrix.vagrant_provider == 'libvirt'
+        run: sudo usermod -a -G libvirt runner
+
+      - name: Install plugin vagrant-libvirt
+        if: matrix.vagrant_provider == 'libvirt'
+        run: vagrant plugin install vagrant-libvirt
+
+      - name: Install plugin vagrant-vbguest
+        if: matrix.vagrant_provider == 'virtualbox'
+        run: vagrant plugin install vagrant-vbguest
+
+      - name: Install plugins vagrant-hostmanager, vagrant-timezone
+        run: |
+          vagrant plugin install vagrant-hostmanager
+          vagrant plugin install vagrant-timezone
+
+      - name: Show Vagrant plugins
+        run: vagrant plugin list
+
+      - name: Install Ansible roles for provisioning
+        run: ansible-galaxy install -r provisioning/requirements.yml -p provisioning/roles
+
+      - name: Get Vagrant status
+        run: sudo su - runner -c "(cd /home/runner/work/ansible-development/ansible-development/ansible-development; vagrant status)"
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          VAGRANT_DEFAULT_PROVIDER: ${{ matrix.vagrant_provider }}
+
+#       Nested virtualization is not supported with GitHub runners
+#
+#      - name: Start vagrant environment
+#        if: matrix.vagrant_provider == 'libvirt'
+#        run: sudo su - runner -c "(cd /home/runner/work/ansible-development/ansible-development/ansible-development; vagrant up --provider=${{ matrix.vagrant_provider }} --no-parallel)"
+#        env:
+#          PY_COLORS: '1'
+#          ANSIBLE_FORCE_COLOR: '1'
+#          VAGRANT_DEFAULT_PROVIDER: ${{ matrix.vagrant_provider }}
+#
+#      - name: Get Vagrant status
+#        run: sudo vagrant status
+#        env:
+#          PY_COLORS: '1'
+#          ANSIBLE_FORCE_COLOR: '1'
+#          VAGRANT_DEFAULT_PROVIDER: ${{ matrix.vagrant_provider }}
+#
+#      - name: Stop Vagrant environment
+#        run: sudo vagrant halt && sudo vagrant destroy -f
+#        env:
+#          PY_COLORS: '1'
+#          ANSIBLE_FORCE_COLOR: '1'
+#          VAGRANT_DEFAULT_PROVIDER: ${{ matrix.vagrant_provider }}

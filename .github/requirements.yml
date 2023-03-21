@@ -1,0 +1,13 @@
+# Install needed roles from Ansible Galaxy
+
+- src: coglinev3.vagrant
+  version: master
+  name: coglinev3.vagrant
+
+- src: coglinev3.virtualbox
+  version: master
+  name: coglinev3.virtualbox
+
+- src: coglinev3.ansible_common
+  version: master
+  name: coglinev3.ansible_common

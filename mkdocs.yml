@@ -42,8 +42,8 @@ markdown_extensions:
 
 extra:
   social:
-    - type: 'gitlab'
-      link: 'https://gitlab.com/cogline_vagrant/ansible-development.git'
+    - type: 'github'
+      link: 'https://github.com/coglinev3/ansible-development.git'
     - type: 'github'
       link: 'https://github.com/coglinev3/vagrant-ansible-init'
   version: 3.0.2

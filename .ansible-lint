@@ -1,0 +1,8 @@
+skip_list:
+  - experimental
+warn_list:
+  - package-latest    # Package installs should not use latest.
+  - yaml[comments]    # Violations reported by yamllint.
+  - yaml[line-length] # Violations reported by yamllint.
+
+#  vim: syntax=yaml
