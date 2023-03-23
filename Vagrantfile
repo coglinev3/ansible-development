@@ -2,22 +2,19 @@
 # vi: set ft=ruby :
 
 require 'yaml'
-# Include box configuration from YAML file boxes.yml
-boxes = YAML.load_file(File.join(File.dirname(__FILE__), 'boxes.yml'))
-# Include environment configuration from YAML file config.yml
+# Include configuration from YAML file config.yml
 config = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yml'))
-current_config = config['vagrant_config'][config['vagrant_config']['env']]
-ansible_client = boxes['clients']
-ansible_master = boxes['master']
+vagrant_config = config['vagrant_config'][config['vagrant_config']['env']]
+ansible_client = config['vagrant_boxes']['clients']
+ansible_master = config['vagrant_boxes']['master']
 
 
-# set defaul Language for each virtual machine to C
-# ENV["LANG"] = "C"
+# Set default Language for each virtual machine
 ENV["LANG"] = "C.UTF-8"
 
 Vagrant.configure(2) do |config|
 
-  if current_config['dynamic_inventory']
+  if vagrant_config['dynamic_inventory']
     # define dynamic inventory file
     ANSIBLE_INVENTORY_FILE = "provisioning/vagrant.ini"
     
@@ -31,18 +28,19 @@ Vagrant.configure(2) do |config|
       f.write "[nodes]\n"
     end
   else
+    # use static inventory file
     ANSIBLE_INVENTORY_FILE = "provisioning/inventory.ini"
   end
 
   # define the provider (virtualbox | libvirt)
-  config.vm.provider current_config['provider']
+  config.vm.provider vagrant_config['provider']
 
   # configure the hostmanager plugin
-  config.hostmanager.enabled = current_config['hostmanager_enabled']
-  config.hostmanager.manage_guest = current_config['hostmanager_manage_guest']
-  config.hostmanager.manage_host = current_config['hostmanager_manage_host']
-  config.hostmanager.include_offline = current_config['hostmanager_include_offline']
-  config.hostmanager.ignore_private_ip = current_config['hostmanager_ignore_private_ip']
+  config.hostmanager.enabled = vagrant_config['hostmanager_enabled']
+  config.hostmanager.manage_guest = vagrant_config['hostmanager_manage_guest']
+  config.hostmanager.manage_host = vagrant_config['hostmanager_manage_host']
+  config.hostmanager.include_offline = vagrant_config['hostmanager_include_offline']
+  config.hostmanager.ignore_private_ip = vagrant_config['hostmanager_ignore_private_ip']
 
 
   # Box Configuration for Ansible Clients
@@ -53,7 +51,7 @@ Vagrant.configure(2) do |config|
         subconfig.vm.box = box["image"]
         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
         if Vagrant.has_plugin?("vagrant-vbguest")
-          subconfig.vbguest.auto_update = current_config['vbguest_auto_update']
+          subconfig.vbguest.auto_update = vagrant_config['vbguest_auto_update']
         end # plugin
         subconfig.vm.hostname = "#{box['hostname']}#{i}"
         subconfig.vm.provider "libvirt" do |libvirt, override|
@@ -92,7 +90,7 @@ Vagrant.configure(2) do |config|
       end # subconfig
 
       # dynamically create the Ansible inventory file
-      if current_config['dynamic_inventory']
+      if vagrant_config['dynamic_inventory']
         File.open("#{ANSIBLE_INVENTORY_FILE}" ,'a') do | f |
           f.write "#{box['hostname']}#{i}    ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa.#{box['hostname']}#{i}\n"
         end
@@ -101,7 +99,7 @@ Vagrant.configure(2) do |config|
     end # each node
   end # each box
 
-  if current_config['dynamic_inventory']
+  if vagrant_config['dynamic_inventory']
     # finish inventory file
     File.open("#{ANSIBLE_INVENTORY_FILE}" ,'a') do | f |
       f.write "\n"

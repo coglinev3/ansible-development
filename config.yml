@@ -19,3 +19,98 @@ vagrant_config:
     hostmanager_ignore_private_ip: false
     vbguest_auto_update: false
     provider: virtualbox
+
+# Every Vagrant development environment requires a box. You can search for
+# boxes at https://atlas.hashicorp.com/search.
+vagrant_boxes:
+  # Ansible management node
+  master:
+    image: generic/alpine317
+    start: true
+    cpus: 1
+    vbox_name: 'Management Node'
+  
+  # Ansible clients
+  clients:
+    - image: generic/alpine317
+      start: true
+      hostname: alpine317-node
+      vbox_name: 'Alpine 3.17 - Node'
+      nodes: 1
+    - image: generic/alma9
+      start: true
+      hostname: el9-node
+      vbox_name: 'EL9 - Node'
+      nodes: 1
+    - image: debian/bullseye64
+      start: true
+      hostname: debian11-node
+      memory: '1024'
+      vbox_name: 'Debian 11 (Bullseye) - Node'
+      nodes: 1
+    - image: generic/fedora37
+      start: true
+      hostname: fedora37-node
+      vbox_name: 'Fedora 37 - Node'
+      nodes: 1
+    - image: generic/ubuntu2204
+      start: true
+      hostname: ubuntu2204-node
+      memory: '1024'
+      vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
+      nodes: 1
+#   - image: generic/alpine314
+#     start: true
+#     hostname: alpine314-node
+#     vbox_name: 'Alpine 3.14 - Node'
+#     nodes: 1
+#   - image: generic/alpine315
+#     start: true
+#     hostname: alpine315-node
+#     vbox_name: 'Alpine 3.15 - Node'
+#     nodes: 1
+#   - image: generic/alpine316
+#     start: true
+#     hostname: alpine316-node
+#     vbox_name: 'Alpine 3.16 - Node'
+#     nodes: 1
+#   - image: generic/centos7
+#     start: true
+#     hostname: el7-node
+#     vbox_name: 'EL7 - Node'
+#     nodes: 1
+#   - image: generic/alma8
+#     start: true
+#     hostname: el8-node
+#     vbox_name: 'EL8 - Node'
+#     nodes: 1
+#   - image: generic/debian9
+#     start: true
+#     hostname: debian9-node
+#     vbox_name: 'Debian 9 (Stretch) - Node'
+#     nodes: 1
+#   - image: generic/debian10
+#     start: true
+#     hostname: debian10-node
+#     vbox_name: 'Debian 10 (Buster) - Node'
+#     nodes: 1
+#   - image: generic/fedora35
+#     start: true
+#     hostname: fedora35-node
+#     vbox_name: 'Fedora 35 - Node'
+#     nodes: 1
+#   - image: generic/fedora36
+#     start: true
+#     hostname: fedora36-node
+#     vbox_name: 'Fedora 36 - Node'
+#     nodes: 1
+#   - image: generic/ubuntu1804
+#     start: true
+#     hostname: ubuntu1804-node
+#     vbox_name: 'Ubuntu 18.04 (Bionic Beaver) - Node'
+#     nodes: 1
+#   - image: generic/ubuntu2004
+#     start: true
+#     hostname: ubuntu2004-node
+#     vbox_name: 'Ubuntu 20.04 (Focal Fossa) - Node'
+#     nodes: 1
