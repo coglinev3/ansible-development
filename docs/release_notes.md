@@ -1,3 +1,48 @@
+# Release Notes for Version 3.1.0
+
+  * Fix Ansible lint errors and warnings
+  * Move from Travis-CI to GitHub Actions
+  * Merge boxes.yml and config.yml to one config file
+  * Set default options in Vagrantfile for box configuration
+  * Revision of documentation
+
+# Release Notes for Version 3.0.2
+
+  * Fix required role names
+
+# Release Notes for Version 3.0.1
+
+  * Set environment to *production*
+  * Uncomment Ansible role *geerlingguy.dotfiles* in requirements.yml
+  * Move active clients on top in boxes.yml
+  
+# Release Notes for Version 3.0.0
+
+  * Add the following supported distributions:
+    * Alpine 3.14,
+    * Alpine 3.15,
+    * Alpine 3.15,
+    * Alpine 3.17,
+    * Enterprise Linux 8,
+    * Enterprise Linux 9,
+    * Debian 11 (Bullseye),
+    * Fedora 35,
+    * Fedora 36.
+    * Fedora 37.
+    * Ubuntu 20.04 LTS (Focal Fossa),
+    * Ubuntu 22.04 LTS (Jammy Jellyfish).
+  * Use Alpine Linux 3.17 as Ansible management node.
+  * The management node can now be configured via the boxes.yml file.
+  * Add config options:
+    * hostmanager_enabled: true | false
+    * hostmanager_manage_guest: true | false
+    * provider: libvirt | virtualbox
+    * memory: Size in MB
+    * cpus: number of cpus
+  * Remove .readthedocs.yml v1
+  * Add .readthedocs.yaml v2
+  * Documentation updated
+
 # Release Notes for Version 2.5.1
 
   * Set default boxes to:
