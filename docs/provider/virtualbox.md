@@ -1,4 +1,6 @@
-# Overview
+# VirtualBox
+
+## Overview
 
 [Oracle VirtualBox](https://www.virtualbox.org/ "Oracle VirtualBox") is a powerful x86 and AMD64/Intel64 virtualization product for enterprise as well as home use. 
 In this article only the needed methods are described to use VirtualBox with Vagrant to save, restore and destroy virtual machines.
@@ -6,7 +8,18 @@ Indeed it is not necessary to know much about VirtualBox. Vagrant will do all st
 If you still want to know more about VirtualBox, you should read the [VirtualBox User Manual](https://www.virtualbox.org/manual/ "VirtualBox User Manual").
 
 
-# Save all virtual machines
+## Requirements
+
+To automatically install the VirtualBox Guest Additions on the guest system, the
+[vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest "vagrant-vbguest") plugin is required.
+
+```bash
+vagrant plugin install vagrant-vbguest
+```
+
+## Snapshots
+
+### Save all virtual machines
 
 Sometimes it makes sense to save the current state of all virtual machines
 before testing a new Ansible Role. If something goes wrong, you can go back to
@@ -27,7 +40,7 @@ vagrant snapshot save initial-setup
         vagrant snapshot list
 
 
-# Save a single machine
+### Save a single machine
 
 If only a single machine is to be saved, eg. el6-node1, the following commands
 can be executed:
@@ -38,7 +51,7 @@ vagrant snapshot save el6-node1 initial-setup
 ```
 
 
-# Restore all machines
+### Restore all machines
 
 You can restore the saved state with:
 
@@ -46,7 +59,7 @@ You can restore the saved state with:
 vagrant snapshot restore initial-setup
 ```
 
-# Restore a single machine
+### Restore a single machine
 
 To restore a single machine, the name of the machine must explicitly be
 specified.
@@ -57,7 +70,9 @@ vagrant snapshot restore el6-node1 initial-setup
 
 Here the machine *el6-node1* will be restored to state *initial-setup*.
 
-# Delete the hole Vagrant environment
+## Delete machines
+
+### Delete the hole Vagrant environment
 
 If you have done your work then the next command stops the running machines
 which Vagrant is managing and destroys all resources that were created during
@@ -68,7 +83,7 @@ at a clean state, as if you never created the guest machines in the first place.
 vagrant destroy -f
 ```
 
-# Delete a single machine
+### Delete a single machine
 
 The removal of a single machine is again shown using the example of *el6-node1*:
 

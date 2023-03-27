@@ -4,25 +4,31 @@ site_name: Vagrant Environment for Testing Ansible Roles
 site_description: A Multi-VM Vagrant environment for Developing and Testing Ansible Roles.
 site_author: Cogline.v3
 
-repo_url: https://gitlab.com/cogline_vagrant/ansible-development
-edit_uri: https://gitlab.com/cogline_vagrant/ansible-development/tree/master/docs
+repo_url: https://github.com/coglinev3/ansible-development
+edit_uri: https://github.com/coglinev3/ansible-development/tree/master/docs
 
 theme:
   name: readthedocs
+  highlightjs: true
   hljs_languages:
     - yaml
     - dosini
     - rust
+  analytics:
+    gtag: G-S4WJCL5RVX
 
 nav:
   - Multi-VM Vagrant environment: index.md
   - Motivation: motivation.md
-  - Getting Started: getting_started.md
+  - Quick Start Guide: getting_started.md
   - Developing and Testing Ansible Roles: test_ansible_roles.md
-  - The Vagrant environment in detail: vagrantfile.md
+  - Vagrant environment details:
+      - Directory structure: environment/directory_structure.md
+      - Configuration options: environment/config_options.md
+      - Vagrantfile: environment/vagrantfile.md
   - Vagrant provider specific tasks:
       - 'VirtualBox': 'provider/virtualbox.md'
-      - 'libvirt (KVM)': 'provider/libvirt.md'
+      - 'KVM with QEMU and libvirt': 'provider/libvirt.md'
   - Install and upgrade Vagrant Boxes: download_images.md
   - About:
       - Release Notes: release_notes.md
@@ -37,6 +43,7 @@ markdown_extensions:
   - admonition
   - def_list
   - extra
+  - fenced_code
   - pymdownx.details
   - pymdownx.superfences
 

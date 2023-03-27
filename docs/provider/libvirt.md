@@ -1,4 +1,20 @@
-# Overview
+# KVM with QEMU and libvirt
+
+## Overview
+
+### Kernel Virtual Machine
+
+[KVM](https://www.linux-kvm.org/page/Main_Page "KVM") (for Kernel-based Virtual Machine) is a full virtualization solution for Linux on x86 hardware containing virtualization extensions (Intel VT or AMD-V). It consists of a loadable kernel module, kvm.ko, that provides the core virtualization infrastructure and a processor specific module, kvm-intel.ko or kvm-amd.ko.
+
+### QEMU
+
+[QEMU](https://www.qemu.org/ "QEMU") is a generic and open source machine emulator and virtualizer.
+
+QEMU can be used in several different ways. The most common is for [System Emulation](https://www.qemu.org/docs/master/system/index.html#system-emulation "System Emulation"), where it provides a virtual model of an entire machine (CPU, memory and emulated devices) to run a guest OS. In this mode the CPU may be fully emulated, or it may work with a hypervisor such as KVM, Xen, Hax or Hypervisor.Framework to allow the guest to run directly on the host CPU.
+
+### libvirt
+
+[Libvirt](https://libvirt.org/drvqemu.html "libvirt Virtualization API") is a KVM/QEMU driver that can manage any QEMU emulator.
 
 The libvirt project:
 
@@ -10,14 +26,11 @@ The libvirt project:
 * is used by many applications
 
 
-This Vagrant environment uses libvirt with KVM under Linux.
+This Vagrant environment uses KVM with the libvirt driver.
 
+## Requirements
 
-# Required plugins for vagrant provider libvirt
-
-Using [libvirt](https://libvirt.org/drvqemu.html "libvirt Virtualization API")
-([KVM](https://www.linux-kvm.org/page/Main_Page "Kernel Virtual Machine"))
-requires the Vagrant plugin [vagrant-libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt "Vagrant Libvirt Provider").
+Using libvirt requires the Vagrant plugin [vagrant-libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt "Vagrant Libvirt Provider").
 
 ```bash
 vagrant plugin install vagrant-libvirt
@@ -34,7 +47,9 @@ vagrant box add ubuntu/trusty64
 vagrant mutate ubuntu/trusty64 libvirt
 ```
 
-# Save all virtual machines
+## Snapshots
+
+### Save all virtual machines
 
 Because the libvirt provider does not support snapshots like the VirtualBox
 provider, you must use other tools for taking snapshots. In the following
@@ -55,7 +70,7 @@ done
 
         for vm in $(virsh list --all --name); do echo $vm; virsh snapshot-list $vm; done
 
-# Save a single machine
+### Save a single machine
 
 If only a single machine is to be saved, eg. el6-node1, the following command can be executed:
 
@@ -70,7 +85,7 @@ virsh snapshot-create-as ansible-development_el6-node1 --name initial-setup
         virsh list --all
 
 
-# Restore all machines
+### Restore all machines
 
 You can restore the saved state for all machines with:
 
@@ -82,7 +97,7 @@ do
 done
 ```
 
-# Restore a single machine
+### Restore a single machine
 
 If you want to reset the virtual machine *el6-node1* to the snapshot
 *initial-setup*, enter the following command.
@@ -91,7 +106,9 @@ If you want to reset the virtual machine *el6-node1* to the snapshot
 virsh snapshot-revert ansible-development_el6-node1 --snapshotname initial-setup --running
 ```
 
-# Delete the hole Vagrant environment
+## Delete machines
+
+### Delete the hole Vagrant environment
 
 If you have done your work then the next command stops the running machines
 which Vagrant is managing and destroys all resources that were created during
@@ -102,7 +119,7 @@ at a clean state, as if you never created the guest machines in the first place.
 vagrant destroy -f
 ```
 
-# Delete a single machine
+### Delete a single machine
 
 The removal of a single machine is again shown using the example of *el6-node1*:
 

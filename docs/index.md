@@ -31,8 +31,9 @@ The supported clients are:
 
 It is desigend for developing and testing Ansible playbooks and roles on
 these operating systems. The configuration can be easily changed to support
-other Linux distributions as well. As Vagrant provider (Hypervisors) [VirtualBox](provider/virtualbox.md "VirtualBox")
-or [libvirt](provider/libvirt.md) with KVM can be used, default ist VirtualBox.
+other Linux distributions as well. [VirtualBox](provider/virtualbox.md "VirtualBox")
+or KVM with Qemu and [libvirt](provider/libvirt.md) can be used as the Vagrant
+provider (hypervisor).
 
 Of course, you can use this environment to develop and test other things like
 Java applications, but that's not the focus of this documentation.

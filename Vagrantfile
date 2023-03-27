@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
   ansible_client.each do |box|
     box_nodes = box["nodes"] || 1
     (1..box_nodes).each do |i|
-      config.vm.define "#{box['hostname']}#{i}", autostart: box["start"] do |subconfig|
+      config.vm.define "#{box['hostname']}#{i}", autostart: box["autostart"] do |subconfig|
         subconfig.vm.box = box["image"]
         subconfig.vm.synced_folder ".", "/vagrant", disabled: true
         if Vagrant.has_plugin?("vagrant-vbguest")

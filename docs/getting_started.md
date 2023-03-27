@@ -1,30 +1,28 @@
 # Quick Start Guide
 
-This document will show you how to get up and running with this multi node
-[Vagrant](https://www.vagrantup.com/ "Vagrant") environment. If you are not
-familiar with Vagrant, then you should read the [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation") too.
+This document shows you how to get this multi-node [Vagrant](https://www.vagrantup.com/ "Vagrant") environment up and running. If you are not familiar with Vagrant, you should also read the [Vagrant Documentation](https://www.vagrantup.com/docs/index.html "Vagrant Documentation").
 
 
 ## Requirements
 
-This setup was tested under Windows 10 with the following components: 
-
-* [VirtualBox = 6.0.14](https://www.virtualbox.org/)
-* [Vagrant = 2.2.6](https://www.vagrantup.com/)
-* [Ansible = 2.8.2](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
-
-and under Ubuntu 22.04 LTS (Jammy Jellyfish) with
+This setup was tested under Ubuntu 22.04 LTS (Jammy Jellyfish) with
 
 * [VirtualBox = 7.0.6](https://www.virtualbox.org/)
 * [libvirt = 8.0.0](https://libvirt.org/index.html)
 * [Vagrant = 2.3.4](https://www.vagrantup.com/)
 * [Ansible = 2.14.2](http://docs.ansible.com/ansible/)
 
+and under Windows 10 with the following components: 
+
+* [VirtualBox = 6.0.14](https://www.virtualbox.org/)
+* [Vagrant = 2.2.6](https://www.vagrantup.com/)
+* [Ansible = 2.8.2](http://docs.ansible.com/ansible/) within [Cygwin 2.10.0](https://www.cygwin.com/), see [Jeff Geerling's](https://www.jeffgeerling.com/) Blog to [Running Ansible within Windows](http://www.jeffgeerling.com/blog/running-ansible-within-windows)
+
 preinstalled.
 
 
 !!! Note
-    This document does not explain how to install these components. You have to do it yourself by reading the installation guides of these components.
+    This document does not explain how to install these components. To do this, follow the installation instructions for these components.
 
 
 ## Get the Vagrant Environment
@@ -73,30 +71,41 @@ sudo yum -y install nfs-utils
 
 ## Define Ansible Client(s)
 
-Your Ansible development environment requires at least one virtual machine 
+For your Ansible development environment, you need at least one virtual machine
 (Vagrant box) with a [supported operating system](/#supported-operating-systems "Supported Operating Systemѕ").
-Open the file `boxes.yml` and enter or uncomment your Ansible clients here, e.g.:
+Open the `config.yml` file and define or comment out your Ansible clients here.
+Please note that you do not comment out the management node when doing this.
 
-!!! Note "boxes.yml"
+!!! Note "config.yml"
     ```yaml
     ---
-    - image: generic/debian11
-      start: true
-      hostname: debian-bullseye-node
-      vbox_name: 'Debian (Bullseye) - Node'
-      nodes: 3
-    - image: generic/ubuntu2204
-      start: true
-      hostname: ubuntu2204-node
-      vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
-      nodes: 1
-
+    vagrant_boxes:
+      # Ansible management node
+      master:
+        image: generic/alpine317
+        start: true
+        cpus: 1
+        vbox_name: 'Management Node'
+      
+      # Ansible clients
+      clients:
+        - image: debian/bullseye64
+          start: true
+          hostname: debian11-node
+          memory: '1024'
+          vbox_name: 'Debian 11 (Bullseye) - Node'
+          nodes: 3
+        - image: generic/ubuntu2204
+          start: true
+          hostname: ubuntu2204-node
+          memory: '1024'
+          vbox_name: 'Ubuntu 22.04 (Jammy Jellyfish) - Node'
+          nodes: 1
     ```
-
-This will start three nodes with Debian 11 and one node with Ubuntu 22.04 LTS. See
-section "[Define Vagrant Boxes](/vagrantfile/#define-vagrant-boxes)" for more
-details on configuring the `boxes.yml` file.
-
+In the sample configuration, three nodes with Debian 11 and one node with
+Ubuntu 22.04 LTS are started in addition to the management node. See section
+"[Define Vagrant Boxes](/vagrantfile/#define-vagrant-boxes)" for more details
+on how to use the `config.yml` file.
 
 ## Initial Provisioning
 
@@ -117,15 +126,19 @@ configured provisioners against the running managed machines.
 The Vagrant environment can be started with the provider VirtualBox as follows.
 
 ```bash
-VAGRANT_DEFAULT_PROVIDER=virtualbox vagrant up
+export VAGRANT_DEFAULT_PROVIDER=virtualbox
+vagrant up
 ```
 
 ### Provisioning with provider libvirt
 
 If you want to use vagrant with libvirt instead of VirtualBox, use
+
 ```bash
-VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up --no-parallel
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+vagrant up --no-parallel
 ```
+
 
 !!! attention "libvirt: Switch off the parallel installation the first time"
     The provider libvirt usually performs the installation of virtual machines
