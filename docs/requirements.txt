@@ -1,3 +1,4 @@
-markdown
+mkdocs==1.5.1
 mkdocs-callouts
 pymdown-extensions
+markdown
