@@ -1,0 +1,4 @@
+markdown==3.4.4
+mkdocs==1.5.2
+mkdocs-callouts==1.9.0
+pymdown-extensions==10.1
