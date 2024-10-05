@@ -38,6 +38,6 @@ provider (hypervisor).
 Of course, you can use this environment to develop and test other things like
 Java applications, but that's not the focus of this documentation.
 
-* [Motivation](/motivation/)
-* [Getting Started](/getting_started/)
-* [Test Ansible Roles](/test_ansible_roles/)
+* [Motivation](motivation/)
+* [Getting Started](getting_started/)
+* [Test Ansible Roles](test_ansible_roles/)
