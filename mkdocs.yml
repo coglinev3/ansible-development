@@ -53,6 +53,6 @@ extra:
       link: 'https://github.com/coglinev3/ansible-development.git'
     - type: 'github'
       link: 'https://github.com/coglinev3/vagrant-ansible-init'
-  version: 3.1.0
+  version: 3.1.2
 
-copyright: Copyright &copy; 2023 Cogline.v3. Release 3.1.0
+copyright: Copyright &copy; 2024 Cogline.v3. Release 3.1.2
